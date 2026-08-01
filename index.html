@@ -1,145 +1,305 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>The Seven Minutes</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <style>
-
-body {
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#111;
-    color:white;
+:root {
+    --bg-color: #0d0d0d;
+    --surface-color: #1a1a1a;
+    --surface-hover: #262626;
+    --text-primary: #ffffff;
+    --text-secondary: #888888;
+    --border-color: #2a2a2a;
 }
 
-.container {
-    padding:20px;
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+}
+
+.screen.active {
+    display: flex;
 }
 
 .logo {
-    font-size:28px;
-    font-weight:bold;
-    margin-bottom:20px;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
 }
 
 .subtitle {
-    color:#aaa;
-    margin-bottom:30px;
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-bottom: 24px;
 }
 
 button {
-    width:100%;
-    padding:18px;
-    margin:8px 0;
-    border:none;
-    border-radius:16px;
-    background:#2b2b2b;
-    color:white;
-    font-size:17px;
-    text-align:left;
+    width: 100%;
+    padding: 16px 20px;
+    margin: 6px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    background: var(--surface-color);
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+button:active {
+    transform: scale(0.98);
 }
 
 button:hover {
-    background:#3b3b3b;
+    background: var(--surface-hover);
 }
 
-.start {
-    background:#fff;
-    color:#111;
-    text-align:center;
-    font-weight:bold;
+.btn-start {
+    background: #ffffff;
+    color: #0d0d0d;
+    border: none;
+    text-align: center;
+    font-weight: 700;
+    justify-content: center;
+    margin-bottom: 24px;
 }
 
-.section {
-    margin-top:25px;
-    color:#aaa;
+.btn-start:hover {
+    background: #e0e0e0;
 }
 
+.section-title {
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 20px 0 10px 0;
+}
+
+/* Плеер тренировки */
+.player-screen {
+    justify-content: space-between;
+    height: 100vh;
+    padding: 10px 0 20px 0;
+    box-sizing: border-box;
+}
+
+.video-container {
+    width: 100%;
+    flex: 1;
+    max-height: 52vh;
+    background: #000;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.timer {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.back-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    text-align: left;
+    padding: 0;
+    margin-bottom: 10px;
+    font-size: 15px;
+    width: auto;
+}
 </style>
-
 </head>
-
 <body>
 
-<div class="container">
+<div class="app-container">
 
-<div class="logo">
-💪 The Seven Minutes
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <div id="main-screen" class="screen active">
+        <div class="logo">💪 The Seven Minutes</div>
+        <div class="subtitle">777+ упражнений для трансформации тела</div>
+
+        <button class="btn-start" onclick="startWorkout()">
+            ▶ Начать тренировку
+        </button>
+
+        <div class="section-title">Категории</div>
+        <button onclick="startWorkout()">🔹 Для начала <span>→</span></button>
+        <button onclick="startWorkout()">🔹 Сброс веса <span>→</span></button>
+        <button onclick="startWorkout()">🔹 Быть в форме <span>→</span></button>
+        <button onclick="startWorkout()">🔹 Специальные тренировки <span>→</span></button>
+        <button onclick="startWorkout()">🔹 К пляжу готов <span>→</span></button>
+        <button onclick="startWorkout()">🔹 Режим ракеты <span>→</span></button>
+
+        <div class="section-title">Дополнительно</div>
+        <button onclick="showScreen('nutrition-screen')">🍎 Основы питания <span>→</span></button>
+        <button onclick="showScreen('progress-screen')">🔥 Мой прогресс <span>→</span></button>
+        <button onclick="openChannel()">📢 Наш Telegram-канал <span>→</span></button>
+    </div>
+
+    <!-- ЭКРАН ПЛЕЕРА -->
+    <div id="player-screen" class="screen player-screen">
+        <div>
+            <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
+            <div id="exercise-counter" style="font-size: 13px; color: var(--text-secondary);">Упражнение 1 из 7</div>
+            <div id="exercise-title" style="font-size: 18px; font-weight: 700; margin-top: 2px;">Прыжки с разведением рук</div>
+        </div>
+
+        <div class="video-container">
+            <video id="ex-video" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" autoplay loop muted playsinline></video>
+        </div>
+
+        <div>
+            <div class="timer" id="timer">30</div>
+            <button class="btn-start" onclick="nextExercise()">Следующее упражнение</button>
+        </div>
+    </div>
+
+    <!-- ЭКРАН ПИТАНИЯ -->
+    <div id="nutrition-screen" class="screen">
+        <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
+        <div class="logo">🍎 Основы питания</div>
+        <div class="subtitle">Базовые принципы для вашей трансформации</div>
+        
+        <div style="background: var(--surface-color); padding: 16px; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 10px;">
+            <div style="font-weight: 700; margin-bottom: 6px;">1. Водный баланс</div>
+            <div style="color: var(--text-secondary); font-size: 14px;">Пейте чистую воду из расчета 30 мл на 1 кг веса.</div>
+        </div>
+        <div style="background: var(--surface-color); padding: 16px; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 10px;">
+            <div style="font-weight: 700; margin-bottom: 6px;">2. Белок во главе угла</div>
+            <div style="color: var(--text-secondary); font-size: 14px;">Строительный материал для мышц в каждый приём пищи.</div>
+        </div>
+    </div>
+
+    <!-- ЭКРАН ПРОГРЕССА -->
+    <div id="progress-screen" class="screen">
+        <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
+        <div class="logo">🔥 Мой прогресс</div>
+        <div class="subtitle">Ваша статистика и регулярность</div>
+        
+        <div style="background: var(--surface-color); padding: 20px; border-radius: 14px; border: 1px solid var(--border-color); text-align: center; margin-bottom: 15px;">
+            <div style="font-size: 36px; font-weight: 800;">0 дней</div>
+            <div style="color: var(--text-secondary); font-size: 14px; margin-top: 5px;">Серия тренировок (Streak)</div>
+        </div>
+    </div>
+
 </div>
-
-<div class="subtitle">
-777+ упражнений для трансформации тела
-</div>
-
-
-<button class="start">
-▶ Начать тренировку
-</button>
-
-
-<div class="section">
-Категории
-</div>
-
-
-<button>
-🔹 Для начала
-</button>
-
-<button>
-🔹 Сброс веса
-</button>
-
-<button>
-🔹 Быть в форме
-</button>
-
-<button>
-🔹 Специальные тренировки
-</button>
-
-<button>
-🔹 К пляжу готов
-</button>
-
-<button>
-🔹 Режим ракеты
-</button>
-
-
-<div class="section">
-Дополнительно
-</div>
-
-
-<button>
-🍎 Основы питания
-</button>
-
-<button>
-🔥 Мой прогресс
-</button>
-
-
-</div>
-
 
 <script>
-
 let tg = window.Telegram.WebApp;
-
 tg.expand();
-
 tg.ready();
 
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+    window.scrollTo(0, 0);
+}
 
+function openChannel() {
+    window.open('https://t.me/+7zIjdiWEi0M1YjMy', '_blank');
+}
+
+const exercises = [
+    { title: "Прыжки с разведением рук", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+    { title: "Приседания с выпрыгиванием", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" },
+    { title: "Отжимания от пола", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" },
+    { title: "Планка с подъемом рук", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" }
+];
+
+let currentExIndex = 0;
+let countdown;
+
+function startWorkout() {
+    currentExIndex = 0;
+    showScreen('player-screen');
+    loadExercise(currentExIndex);
+}
+
+function loadExercise(index) {
+    clearInterval(countdown);
+    let ex = exercises[index];
+    document.getElementById('exercise-title').innerText = ex.title;
+    document.getElementById('exercise-counter').innerText = `Упражнение ${index + 1} из ${exercises.length}`;
+    
+    let videoElement = document.getElementById('ex-video');
+    videoElement.src = ex.video;
+    videoElement.play();
+
+    startTimer(30);
+}
+
+function startTimer(seconds) {
+    let timeLeft = seconds;
+    document.getElementById('timer').innerText = timeLeft;
+    
+    countdown = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').innerText = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            nextExercise();
+        }
+    }, 1000);
+}
+
+function nextExercise() {
+    currentExIndex++;
+    if (currentExIndex < exercises.length) {
+        loadExercise(currentExIndex);
+    } else {
+        alert('Тренировка успешно завершена! Отличная работа.');
+        showScreen('main-screen');
+    }
+}
 </script>
-
 
 </body>
 </html>
+
+```
