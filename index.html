@@ -1,219 +1,175 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>7Min</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-:root {
-    --bg-color: #0f1115;
-    --surface-color: #1a1e24;
-    --surface-hover: #252b33;
-    --text-primary: #ffffff;
-    --text-secondary: #9aa0a6;
-    --border-color: #2c3440;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7Min Workout</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f0f11;
+            --card-bg: #1c1c1e;
+            --accent-color: #ff3b30;
+            --text-color: #ffffff;
+            --text-secondary: #8e8e93;
+            --border-radius: 16px;
+        }
 
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg-color);
-    color: var(--text-primary);
-    display: flex;
-    justify-content: center;
-    overflow-x: hidden;
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 16px;
+            box-sizing: border-box;
+        }
 
-.app-container {
-    width: 100%;
-    max-width: 480px;
-    min-height: 100vh;
-    box-sizing: border-box;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-}
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
 
-.screen {
-    display: none;
-    flex-direction: column;
-    flex: 1;
-}
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            color: var(--accent-color);
+            letter-spacing: -0.5px;
+        }
 
-.screen.active {
-    display: flex;
-}
+        .header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
 
-.logo {
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: 6px;
-}
+        .workout-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-.subtitle {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 20px;
-}
+        .badge {
+            background-color: rgba(255, 59, 48, 0.15);
+            color: var(--accent-color);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
 
-button {
-    width: 100%;
-    padding: 16px 20px;
-    margin: 6px 0;
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    background: var(--surface-color);
-    color: var(--text-primary);
-    font-size: 16px;
-    font-weight: 500;
-    text-align: left;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
+        .workout-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+        }
 
-button:active {
-    transform: scale(0.98);
-}
+        .workout-meta {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+        }
 
-button:hover {
-    background: var(--surface-hover);
-}
+        .description {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d1d1d6;
+            margin-bottom: 16px;
+        }
 
-.section-title {
-    color: var(--text-secondary);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    margin: 16px 0 8px 0;
-    font-weight: 600;
-}
+        .rules-box {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--accent-color);
+            padding: 12px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: #e5e5ea;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
 
-.back-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    text-align: left;
-    padding: 0;
-    margin-bottom: 16px;
-    font-size: 14px;
-    width: auto;
-}
-</style>
+        .btn-start {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s ease, opacity 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-start:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+    </style>
 </head>
 <body>
 
-<div class="app-container">
-
-    <!-- ГЛАВНЫЙ ЭКРАН -->
-    <div id="main-screen" class="screen active">
-        <div class="logo">💪 7Min</div>
-        <div class="subtitle">Тренировки для трансформации тела</div>
-
-        <div class="section-title">Категории тренировок</div>
-        <!-- Вставь свои ссылки на защищенные посты из телеграм-канала в кавычки вместо # -->
-        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_1')">⚡ 1. Для начала <span>→</span></button>
-        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_2')">🧘‍♂️ 2. Подвижность <span>→</span></button>
-        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_3')">🔥 3. Сброс веса <span>→</span></button>
-        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_4')">🏋️‍♂️ 4. Быть в форме <span>→</span></button>
-        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_5')">🎯 5. Специальные тренировки <span>→</span></button>
-        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_6')">🏖️ 6. К пляжу готов <span>→</span></button>
-        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_7')">🚀 7. Режим ракеты <span>→</span></button>
-
-        <div class="section-title">Дополнительно</div>
-        <button onclick="showScreen('nutrition-screen')">🍎 Основы питания <span>→</span></button>
-        <button onclick="showScreen('progress-screen')">🔥 Мой прогресс <span>→</span></button>
+    <div class="header">
+        <h1>7Min Workout</h1>
+        <p>Система эффективных домашних тренировок</p>
     </div>
 
-    <!-- ЭКРАН ПИТАНИЯ -->
-    <div id="nutrition-screen" class="screen" style="padding-bottom: 24px;">
-        <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
-        <div class="logo">🍎 Питание</div>
-        <div class="subtitle">Основы здорового рациона и рецепты</div>
-
-        <div style="background: var(--surface-color); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-            <div style="font-weight: 700; font-size: 16px; margin-bottom: 12px; color: var(--text-primary);">🥗 Основы здорового питания</div>
-            <ul style="padding-left: 0; list-style: none; margin: 0 0 16px 0; color: var(--text-secondary); font-size: 14px; line-height: 1.5;">
-                <li style="margin-bottom: 8px;">✅ Ешьте регулярно</li>
-                <li style="margin-bottom: 8px;">✅ Включайте источник белка в основные приёмы пищи</li>
-                <li style="margin-bottom: 8px;">✅ Ежедневно употребляйте овощи и фрукты</li>
-                <li style="margin-bottom: 8px;">✅ Пейте достаточно воды в течение дня</li>
-                <li style="margin-bottom: 8px;">✅ Отдавайте предпочтение натуральным продуктам с минимальной обработкой</li>
-                <li style="margin-bottom: 8px;">✅ Контролируйте размер порций и избегайте переедания</li>
-                <li style="margin-bottom: 0;">✅ Старайтесь поддерживать разнообразный рацион</li>
-            </ul>
-            
-            <div style="background: var(--surface-hover); padding: 14px; border-radius: 12px; font-size: 14px;">
-                <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">📌 Простая формула тарелки:</div>
-                <div style="color: var(--text-secondary); margin-bottom: 4px;">🥗 ½ тарелки — овощи</div>
-                <div style="color: var(--text-secondary); margin-bottom: 4px;">🍗 ¼ тарелки — белковые продукты</div>
-                <div style="color: var(--text-secondary);">🍚 ¼ тарелки — сложные углеводы</div>
-                <div style="margin-top: 10px; font-size: 12px; color: #7a828b; font-style: italic;">Главная цель — не идеальное питание, а устойчивые привычки на длительный срок.</div>
-            </div>
+    <!-- КАРТОЧКА ТРЕНИРОВКИ №1 -->
+    <div class="workout-card">
+        <span class="badge">🔥 Классика</span>
+        <h2 class="workout-title">Все тело</h2>
+        
+        <div class="workout-meta">
+            <span>⏱️ 07:50 мин</span>
+            <span>🏋️‍♂️ 12 упражнений</span>
         </div>
 
-        <div style="background: var(--surface-color); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-            <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px; color: var(--text-primary);">🍚 Как готовить крупы</div>
-            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">⭐ Самые популярные для повседневного питания</div>
+        <p class="description">
+            Начните свое фитнес-путешествие с подборкой тренировок для всего тела, чтобы повысить общий уровень физподготовки.<br><br>
+            Научно доказано, что так обеспечиваются самые лучшие результаты в кратчайшие сроки. Этот классический ВИИТ имеет все необходимое для достижения ваших целей.
+        </p>
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                <div style="background: var(--surface-hover); padding: 12px; border-radius: 12px;">
-                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">🌾 Гречка</div>
-                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">• Промыть<br>• Пропорция 1 / 2<br>• Варить 15–20 мин<br>• Настоять 5–10 мин</div>
-                </div>
-                <div style="background: var(--surface-hover); padding: 12px; border-radius: 12px;">
-                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">🍚 Рис</div>
-                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">• Промыть 3–5 раз<br>• Пропорция 1 / 2<br>• Варить 15–20 мин<br>• Настоять 10 мин</div>
-                </div>
-                <div style="background: var(--surface-hover); padding: 12px; border-radius: 12px;">
-                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">🥣 Овсянка</div>
-                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">• 1 / 2–3 (вода/молоко)<br>• Варить 3–10 мин</div>
-                </div>
-                <div style="background: var(--surface-hover); padding: 12px; border-radius: 12px;">
-                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">🌾 Булгур</div>
-                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">• Пропорция 1 / 2<br>• Варить 15–20 мин<br>под крышкой</div>
-                </div>
-            </div>
+        <div class="rules-box">
+            <strong>Как тренироваться:</strong><br>
+            • Выполните каждое из 12 упражнений в течение 30 секунд.<br>
+            • 10 секунд отдыха между ними.<br>
+            • Интенсивность: 8/10 (до ощутимого дискомфорта).<br>
+            • Хорошая новость: вы закончите уже через 7 минут!
         </div>
+
+        <!-- Кнопка с твоей рабочей ссылкой на закрытый пост -->
+        <button class="btn-start" onclick="openPost('https://t.me/c/2527751508/2/57')">
+            ▶️ Смотреть видео
+        </button>
     </div>
 
-    <!-- ЭКРАН ПРОГРЕССА -->
-    <div id="progress-screen" class="screen">
-        <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
-        <div class="logo">🔥 Мой прогресс</div>
-        <div class="subtitle">Ваша статистика и регулярность</div>
-        <div style="background: var(--surface-color); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center;">
-            <div style="font-size: 40px; font-weight: 800;">0 дней</div>
-            <div style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">Серия тренировок (Streak)</div>
-        </div>
-    </div>
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Разворачиваем приложение на весь экран
 
-</div>
-
-<script>
-let tg = window.Telegram.WebApp;
-tg.expand();
-tg.ready();
-
-function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-    window.scrollTo(0, 0);
-}
-
-// Функция для открытия защищенного поста в Telegram-канале
-function openTelegramWorkout(url) {
-    if (url.includes('t.me/')) {
-        tg.openTelegramLink(url);
-    } else {
-        alert('Ссылка на тренировку скоро появится!');
-    }
-}
-</script>
-
+        // Функция открытия ссылки на пост закрытой группы
+        function openPost(url) {
+            if (tg.openTelegramLink) {
+                // Открывает пост прямо внутри Telegram без выхода в внешний браузер
+                tg.openTelegramLink(url);
+            } else {
+                window.location.href = url;
+            }
+        }
+    </script>
 </body>
 </html>
