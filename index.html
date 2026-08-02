@@ -2,73 +2,61 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>7Min — Тренировки</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            var(--bg-color: var(--tg-theme-bg-color, #1c1d22);
-            var(--text-color: var(--tg-theme-text-color, #ffffff);
-            var(--hint-color: var(--tg-theme-hint-color, #707579);
-            var(--card-bg: var(--tg-theme-secondary-bg-color, #232e3c);
+            --bg-color: var(--tg-theme-bg-color, #121212);
+            --text-color: var(--tg-theme-text-color, #ffffff);
+            --hint-color: var(--tg-theme-hint-color, #aaaaaa);
+            --card-bg: var(--tg-theme-secondary-bg-color, #1e1e1e);
+            --button-color: var(--tg-theme-button-color, #2ea6ff);
+            --button-text: var(--tg-theme-button-text-color, #ffffff);
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #1c1d22);
-            color: var(--tg-theme-text-color, #ffffff);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 16px;
             box-sizing: border-box;
-            -webkit-user-select: none;
-            user-select: none;
         }
 
-        .header {
-            margin-bottom: 24px;
+        h1 {
+            font-size: 22px;
+            margin-bottom: 4px;
         }
 
-        .header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 0 4px 0;
-        }
-
-        .header .subtitle {
+        .subtitle {
             font-size: 14px;
-            color: var(--tg-theme-hint-color, #707579);
-            margin: 0;
+            color: var(--hint-color);
+            margin-bottom: 20px;
         }
 
         .section-title {
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
-            color: var(--tg-theme-hint-color, #707579);
-            margin-bottom: 12px;
+            color: var(--hint-color);
+            margin: 20px 0 10px 0;
             letter-spacing: 0.5px;
-            font-weight: 500;
-        }
-
-        .card-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
         }
 
         .card {
-            background-color: var(--tg-theme-secondary-bg-color, #232e3c);
-            border-radius: 12px;
+            background-color: var(--card-bg);
+            border-radius: 14px;
             padding: 16px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            transition: transform 0.1s ease, opacity 0.2s ease;
+            transition: transform 0.1s ease;
         }
 
         .card:active {
-            transform: scale(0.97);
-            opacity: 0.8;
+            transform: scale(0.98);
         }
 
         .card-info {
@@ -78,9 +66,7 @@
         }
 
         .card-icon {
-            font-size: 22px;
-            width: 28px;
-            text-align: center;
+            font-size: 24px;
         }
 
         .card-title {
@@ -89,120 +75,192 @@
         }
 
         .lock-icon {
-            font-size: 16px;
+            font-size: 18px;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 24px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--hint-color);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: var(--text-color);
+        }
+
+        .btn-ok {
+            background-color: var(--button-color);
+            color: var(--button-text);
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>7Min</h1>
-        <p class="subtitle">Тренировки для трансформации тела</p>
-    </div>
+    <h1>💪 7Min</h1>
+    <div class="subtitle">Тренировки для трансформации тела</div>
 
     <div class="section-title">Категории тренировок</div>
 
-    <div class="card-list">
-        <div class="card" onclick="handleCardClick('1', true)">
-            <div class="card-info">
-                <span class="card-icon">⚡</span>
-                <span class="card-title">1. Для начала</span>
-            </div>
-            <span class="lock-icon">🔒</span>
+    <div class="card" onclick="openFreeVideo('ССЫЛКА_НА_ПОСТ_С_ВИДЕО_В_БОТЕ')">
+        <div class="card-info">
+            <span class="card-icon">⚡</span>
+            <span class="card-title">1. Для начала (Бесплатно)</span>
         </div>
+    </div>
 
-        <div class="card" onclick="handleCardClick('2', true)">
-            <div class="card-info">
-                <span class="card-icon">🧘</span>
-                <span class="card-title">2. Подвижность</span>
-            </div>
-            <span class="lock-icon">🔒</span>
+    <div class="card" onclick="openPayModal('2. Подвижность')">
+        <div class="card-info">
+            <span class="card-icon">🧘</span>
+            <span class="card-title">2. Подвижность</span>
         </div>
+        <span class="lock-icon">🔒</span>
+    </div>
 
-        <div class="card" onclick="handleCardClick('3', true)">
-            <div class="card-info">
-                <span class="card-icon">🔥</span>
-                <span class="card-title">3. Сброс веса</span>
-            </div>
-            <span class="lock-icon">🔒</span>
+    <div class="card" onclick="openPayModal('3. Сброс веса')">
+        <div class="card-info">
+            <span class="card-icon">🔥</span>
+            <span class="card-title">3. Сброс веса</span>
         </div>
+        <span class="lock-icon">🔒</span>
+    </div>
 
-        <div class="card" onclick="handleCardClick('4', true)">
-            <div class="card-info">
-                <span class="card-icon">⭐</span>
-                <span class="card-title">4. Быть в форме</span>
-            </div>
-            <span class="lock-icon">🔒</span>
+    <div class="card" onclick="openPayModal('4. Быть в форме')">
+        <div class="card-info">
+            <span class="card-icon">⭐️</span>
+            <span class="card-title">4. Быть в форме</span>
         </div>
+        <span class="lock-icon">🔒</span>
+    </div>
 
-        <div class="card" onclick="handleCardClick('5', true)">
-            <div class="card-info">
-                <span class="card-icon">🎯</span>
-                <span class="card-title">5. Специальные</span>
-            </div>
-            <span class="lock-icon">🔒</span>
+    <div class="card" onclick="openPayModal('5. Специальные')">
+        <div class="card-info">
+            <span class="card-icon">🎯</span>
+            <span class="card-title">5. Специальные</span>
         </div>
+        <span class="lock-icon">🔒</span>
+    </div>
 
-        <div class="card" onclick="handleCardClick('6', true)">
-            <div class="card-info">
-                <span class="card-icon">⛱️</span>
-                <span class="card-title">6. К пляжу готов</span>
-            </div>
-            <span class="lock-icon">🔒</span>
+    <div class="card" onclick="openPayModal('6. К пляжу готов')">
+        <div class="card-info">
+            <span class="card-icon">🏖️</span>
+            <span class="card-title">6. К пляжу готов</span>
         </div>
+        <span class="lock-icon">🔒</span>
+    </div>
 
-        <div class="card" onclick="handleCardClick('7', true)">
-            <div class="card-info">
-                <span class="card-icon">🚀</span>
-                <span class="card-title">7. Примите вызов</span>
-            </div>
-            <span class="lock-icon">🔒</span>
+    <div class="card" onclick="openPayModal('7. Примите вызов')">
+        <div class="card-info">
+            <span class="card-icon">🚀</span>
+            <span class="card-title">7. Примите вызов</span>
         </div>
+        <span class="lock-icon">🔒</span>
+    </div>
 
-        <div class="card" onclick="handleCardClick('8', true)">
-            <div class="card-info">
-                <span class="card-icon">🥗</span>
-                <span class="card-title">8. Питание</span>
-            </div>
-            <span class="lock-icon">🔒</span>
+    <div class="card" onclick="openPayModal('8. Питание')">
+        <div class="card-info">
+            <span class="card-icon">🥗</span>
+            <span class="card-title">8. Питание</span>
         </div>
+        <span class="lock-icon">🔒</span>
+    </div>
 
-        <div class="card" onclick="handleCardClick('9', true)">
-            <div class="card-info">
-                <span class="card-icon">⏱️</span>
-                <span class="card-title">9. Интервальное голодание</span>
-            </div>
-            <span class="lock-icon">🔒</span>
+    <div class="card" onclick="openPayModal('9. Интервальное голодание')">
+        <div class="card-info">
+            <span class="card-icon">⏱️</span>
+            <span class="card-title">9. Интервальное голодание</span>
         </div>
+        <span class="lock-icon">🔒</span>
+    </div>
 
-        <div class="card" onclick="handleCardClick('10', true)">
-            <div class="card-info">
-                <span class="card-icon">🎵</span>
-                <span class="card-title">10. Музыка</span>
+    <div class="card" onclick="openPayModal('10. Музыка')">
+        <div class="card-info">
+            <span class="card-icon">🎵</span>
+            <span class="card-title">10. Музыка</span>
+        </div>
+        <span class="lock-icon">🔒</span>
+    </div>
+
+    <div class="modal" id="payModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">Раздел заблокирован</div>
+            <div class="modal-text" id="modalText">Этот раздел доступен по подписке. Перейти к оформлению за Telegram Stars?</div>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeModal()">Отмена</button>
+                <button class="btn btn-ok" onclick="proceedToPayment()">ОК</button>
             </div>
-            <span class="lock-icon">🔒</span>
         </div>
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand(); // Разворачиваем окно на максимум
+        let tg = window.Telegram.WebApp;
+        tg.expand();
 
-        function handleCardClick(categoryId, isLocked) {
-            // Легкая вибрация телефона при клике (работает на большинстве смартфонов)
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
+        const PAY_LINK = 'https://t.me/+y2_XMprwee9mNWEy';
 
-            if (isLocked) {
-                // Если категория под замком — СРАЗУ открываем ссылку на подписку
-                tg.openTelegramLink("https://t.me/+y2_XMprwee9mNWEy");
-            } else {
-                console.log("Открыт раздел:", categoryId);
-            }
+        function openFreeVideo(videoLink) {
+            tg.openTelegramLink(videoLink);
+        }
+
+        function openPayModal(sectionName) {
+            document.getElementById('modalTitle').innerText = `Раздел "${sectionName}"`;
+            document.getElementById('payModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('payModal').style.display = 'none';
+        }
+
+        function proceedToPayment() {
+            tg.openTelegramLink(PAY_LINK);
         }
     </script>
 </body>
-                    </html>
-                    
+</html>
