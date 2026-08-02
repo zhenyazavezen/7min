@@ -84,22 +84,6 @@ button:hover {
     background: var(--surface-hover);
 }
 
-.btn-start {
-    background: #ffffff;
-    color: #0f1115;
-    border: none;
-    text-align: center;
-    font-weight: 700;
-    justify-content: center;
-    margin-bottom: 20px;
-    font-size: 17px;
-    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
-}
-
-.btn-start:hover {
-    background: #e0e0e0;
-}
-
 .section-title {
     color: var(--text-secondary);
     font-size: 12px;
@@ -109,67 +93,13 @@ button:hover {
     font-weight: 600;
 }
 
-.player-screen {
-    justify-content: space-between;
-    height: 100vh;
-    padding: 10px 0 16px 0;
-    box-sizing: border-box;
-}
-
-.player-header {
-    display: flex;
-    flex-direction: column;
-}
-
-.video-container {
-    width: 100%;
-    flex: 1;
-    background: #000;
-    border-radius: 24px;
-    border: 1px solid var(--border-color);
-    position: relative;
-    overflow: hidden;
-    margin: 12px 0;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-}
-
-.video-container video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none; /* Запрещает клики и вызов меню на видео */
-}
-
-.timer-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--surface-color);
-    padding: 12px 20px;
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    margin-bottom: 12px;
-}
-
-.timer-label {
-    color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.timer {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -1px;
-}
-
 .back-btn {
     background: transparent;
     border: none;
     color: var(--text-secondary);
     text-align: left;
     padding: 0;
-    margin-bottom: 6px;
+    margin-bottom: 16px;
     font-size: 14px;
     width: auto;
 }
@@ -179,51 +109,32 @@ button:hover {
 
 <div class="app-container">
 
+    <!-- ГЛАВНЫЙ ЭКРАН -->
     <div id="main-screen" class="screen active">
         <div class="logo">💪 7Min</div>
         <div class="subtitle">Тренировки для трансформации тела</div>
 
-        <div class="section-title">Категории</div>
-        <button onclick="startWorkout(0)">⚡ 1. Для начала <span>→</span></button>
-        <button onclick="startWorkout(1)">🧘‍♂️ 2. Подвижность <span>→</span></button>
-        <button onclick="startWorkout(2)">🔥 3. Сброс веса <span>→</span></button>
-        <button onclick="startWorkout(3)">🏋️‍♂️ 4. Быть в форме <span>→</span></button>
-        <button onclick="startWorkout(4)">🎯 5. Специальные тренировки <span>→</span></button>
-        <button onclick="startWorkout(5)">🏖️ 6. К пляжу готов <span>→</span></button>
-        <button onclick="startWorkout(6)">🚀 7. Режим ракеты <span>→</span></button>
+        <div class="section-title">Категории тренировок</div>
+        <!-- Вставь свои ссылки на защищенные посты из телеграм-канала в кавычки вместо # -->
+        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_1')">⚡ 1. Для начала <span>→</span></button>
+        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_2')">🧘‍♂️ 2. Подвижность <span>→</span></button>
+        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_3')">🔥 3. Сброс веса <span>→</span></button>
+        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_4')">🏋️‍♂️ 4. Быть в форме <span>→</span></button>
+        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_5')">🎯 5. Специальные тренировки <span>→</span></button>
+        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_6')">🏖️ 6. К пляжу готов <span>→</span></button>
+        <button onclick="openTelegramWorkout('https://t.me/твой_канал/ССЫЛКА_НА_ПОСТ_7')">🚀 7. Режим ракеты <span>→</span></button>
 
         <div class="section-title">Дополнительно</div>
         <button onclick="showScreen('nutrition-screen')">🍎 Основы питания <span>→</span></button>
         <button onclick="showScreen('progress-screen')">🔥 Мой прогресс <span>→</span></button>
     </div>
 
-    <div id="player-screen" class="screen player-screen">
-        <div class="player-header">
-            <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
-            <div id="exercise-counter" style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;"></div>
-            <div id="exercise-title" style="font-size: 20px; font-weight: 700; margin-top: 2px;"></div>
-        </div>
-
-        <div class="video-container">
-            <!-- Защищенный тег видео с блокировкой скачивания -->
-            <video id="ex-video" src="" autoplay loop muted playsinline disablePictureInPicture controlslist="nodownload noplaybackrate nofullscreen"></video>
-        </div>
-
-        <div>
-            <div class="timer-box">
-                <span class="timer-label">Осталось времени</span>
-                <div class="timer" id="timer">30</div>
-            </div>
-            <button class="btn-start" onclick="nextExercise()" style="margin-bottom: 0;">Следующее упражнение →</button>
-        </div>
-    </div>
-
+    <!-- ЭКРАН ПИТАНИЯ -->
     <div id="nutrition-screen" class="screen" style="padding-bottom: 24px;">
         <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
         <div class="logo">🍎 Питание</div>
         <div class="subtitle">Основы здорового рациона и рецепты</div>
 
-        <!-- Блок 1: Основы -->
         <div style="background: var(--surface-color); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 16px;">
             <div style="font-weight: 700; font-size: 16px; margin-bottom: 12px; color: var(--text-primary);">🥗 Основы здорового питания</div>
             <ul style="padding-left: 0; list-style: none; margin: 0 0 16px 0; color: var(--text-secondary); font-size: 14px; line-height: 1.5;">
@@ -245,7 +156,6 @@ button:hover {
             </div>
         </div>
 
-        <!-- Блок 2: Крупы -->
         <div style="background: var(--surface-color); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 16px;">
             <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px; color: var(--text-primary);">🍚 Как готовить крупы</div>
             <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">⭐ Самые популярные для повседневного питания</div>
@@ -267,38 +177,11 @@ button:hover {
                     <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">🌾 Булгур</div>
                     <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">• Пропорция 1 / 2<br>• Варить 15–20 мин<br>под крышкой</div>
                 </div>
-                <div style="background: var(--surface-hover); padding: 12px; border-radius: 12px;">
-                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">🌾 Пшено</div>
-                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">• Обдать кипятком<br>• Пропорция 1 / 2,5–3<br>• Варить 20–25 мин</div>
-                </div>
-                <div style="background: var(--surface-hover); padding: 12px; border-radius: 12px;">
-                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">🌾 Перловка</div>
-                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">• Замочить на 6–12 ч<br>• Пропорция 1 / 3<br>• Варить 50–60 мин</div>
-                </div>
-                <div style="background: var(--surface-hover); padding: 12px; border-radius: 12px;">
-                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">🌾 Ячневая</div>
-                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">• Промыть<br>• Пропорция 1 / 2,5<br>• Варить 20–25 мин</div>
-                </div>
-                <div style="background: var(--surface-hover); padding: 12px; border-radius: 12px;">
-                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">🍚 Кускус</div>
-                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">• Пропорция 1 / 1<br>• Залить кипятком<br>• Настоять 5–10 мин</div>
-                </div>
             </div>
-        </div>
-
-        <!-- Блок 3: Общие рекомендации -->
-        <div style="background: var(--surface-color); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color);">
-            <div style="font-weight: 700; font-size: 16px; margin-bottom: 12px; color: var(--text-primary);">📌 Общие рекомендации</div>
-            <ul style="padding-left: 0; list-style: none; margin: 0; color: var(--text-secondary); font-size: 14px; line-height: 1.5;">
-                <li style="margin-bottom: 8px;">✅ Промывайте крупы перед приготовлением</li>
-                <li style="margin-bottom: 8px;">✅ После варки оставляйте под крышкой 5–10 мин</li>
-                <li style="margin-bottom: 8px;">✅ Соль добавляйте по вкусу</li>
-                <li style="margin-bottom: 8px;">✅ Масло добавляйте в готовое блюдо</li>
-                <li style="margin-bottom: 0;">✅ Не открывайте крышку во время варки</li>
-            </ul>
         </div>
     </div>
 
+    <!-- ЭКРАН ПРОГРЕССА -->
     <div id="progress-screen" class="screen">
         <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
         <div class="logo">🔥 Мой прогресс</div>
@@ -322,59 +205,12 @@ function showScreen(screenId) {
     window.scrollTo(0, 0);
 }
 
-const exercises = [
-    { title: "1. Для начала", video: "video1.mp4", time: 420 },
-    { title: "2. Подвижность", video: "video2.mp4", time: 420 },
-    { title: "3. Сброс веса", video: "video3.mp4", time: 420 },
-    { title: "4. Быть в форме", video: "video4.mp4", time: 420 },
-    { title: "5. Специальные тренировки", video: "video5.mp4", time: 420 },
-    { title: "6. К пляжу готов", video: "video6.mp4", time: 420 },
-    { title: "7. Режим ракеты", video: "video7.mp4", time: 460 }
-];
-
-let currentExIndex = 0;
-let countdown;
-
-function startWorkout(index) {
-    currentExIndex = index;
-    showScreen('player-screen');
-    loadExercise(currentExIndex);
-}
-
-function loadExercise(index) {
-    clearInterval(countdown);
-    let ex = exercises[index];
-    document.getElementById('exercise-title').innerText = ex.title;
-    document.getElementById('exercise-counter').innerText = `Раздел ${index + 1} из ${exercises.length}`;
-    
-    let videoElement = document.getElementById('ex-video');
-    videoElement.src = ex.video;
-    videoElement.play().catch(e => console.log("Ожидание воспроизведения"));
-
-    startTimer(ex.time);
-}
-
-function startTimer(seconds) {
-    let timeLeft = seconds;
-    document.getElementById('timer').innerText = timeLeft;
-    
-    countdown = setInterval(() => {
-        timeLeft--;
-        document.getElementById('timer').innerText = timeLeft;
-        if (timeLeft <= 0) {
-            clearInterval(countdown);
-            nextExercise();
-        }
-    }, 1000);
-}
-
-function nextExercise() {
-    currentExIndex++;
-    if (currentExIndex < exercises.length) {
-        loadExercise(currentExIndex);
+// Функция для открытия защищенного поста в Telegram-канале
+function openTelegramWorkout(url) {
+    if (url.includes('t.me/')) {
+        tg.openTelegramLink(url);
     } else {
-        alert('Тренировка успешно завершена! Отличная работа.');
-        showScreen('main-screen');
+        alert('Ссылка на тренировку скоро появится!');
     }
 }
 </script>
