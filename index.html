@@ -146,10 +146,10 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Ссылка на оплату / вступление в подписку
-        const PAY_LINK = 'https://t.me/zhenya_zavezen_bot'; // При необходимости можно поменять на ссылку-приглашение
+        // Ссылка на бота для оформления подписки
+        const PAY_LINK = 'https://t.me/zhenya_zavezen_bot';
 
-        // Переход по прямой ссылке
+        // Открытие внешних ссылок (на бесплатное видео)
         function openLink(url) {
             if (tg.openTelegramLink) {
                 tg.openTelegramLink(url);
@@ -158,20 +158,27 @@
             }
         }
 
-        // Подтверждение подписки
+        // Подтверждение подписки с закрытием Mini App
         function requireSubscription(sectionName) {
             if (tg.showConfirm) {
                 tg.showConfirm(
                     `Раздел "${sectionName}" доступен по подписке.\n\nПерейти к оформлению подписки за Telegram Stars?`, 
                     function(ok) {
                         if (ok) {
-                            openLink(PAY_LINK);
+                            if (tg.openTelegramLink) {
+                                tg.openTelegramLink(PAY_LINK);
+                            }
+                            // Закрываем приложение, чтобы пользователь оказался в чате с ботом
+                            tg.close();
                         }
                     }
                 );
             } else {
                 if (confirm(`Раздел "${sectionName}" доступен по подписке. Перейти к оформлению?`)) {
-                    openLink(PAY_LINK);
+                    if (tg.openTelegramLink) {
+                        tg.openTelegramLink(PAY_LINK);
+                    }
+                    tg.close();
                 }
             }
         }
