@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>The Seven Minutes</title>
+<title>7Min</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root {
@@ -109,7 +109,6 @@ button:hover {
     font-weight: 600;
 }
 
-/* Плеер тренировки */
 .player-screen {
     justify-content: space-between;
     height: 100vh;
@@ -180,24 +179,21 @@ button:hover {
 <div class="app-container">
 
     <div id="main-screen" class="screen active">
-        <div class="logo">💪 The Seven Minutes</div>
+        <div class="logo">💪 7Min</div>
         <div class="subtitle">Тренировки для трансформации тела</div>
 
-        <div class="section-title">Категории тренировок</div>
+        <div class="section-title">Категории</div>
         <button onclick="startWorkout(0)">⚡ 1. Для начала <span>→</span></button>
         <button onclick="startWorkout(1)">🧘‍♂️ 2. Подвижность <span>→</span></button>
         <button onclick="startWorkout(2)">🔥 3. Сброс веса <span>→</span></button>
         <button onclick="startWorkout(3)">🏋️‍♂️ 4. Быть в форме <span>→</span></button>
-        <button onclick="startWorkout(4)">🎯 5. Специальные <span>→</span></button>
+        <button onclick="startWorkout(4)">🎯 5. Специальные тренировки <span>→</span></button>
         <button onclick="startWorkout(5)">🏖️ 6. К пляжу готов <span>→</span></button>
-        <button onclick="startWorkout(6)">🚀 7. Примите вызов <span>→</span></button>
-        <button onclick="startWorkout(7)">🍎 8. Питание <span>→</span></button>
-        <button onclick="startWorkout(8)">⏱️ 9. Интервальное голодание <span>→</span></button>
-        <button onclick="startWorkout(9)">🎵 10. Музыка <span>→</span></button>
+        <button onclick="startWorkout(6)">🚀 7. Режим ракеты <span>→</span></button>
 
         <div class="section-title">Дополнительно</div>
-        <button onclick="showScreen('progress-screen')">📈 Мой прогресс <span>→</span></button>
-        <button onclick="openChannel()">📢 Наш Telegram-канал <span>→</span></button>
+        <button onclick="showScreen('nutrition-screen')">🍎 Основы питания <span>→</span></button>
+        <button onclick="showScreen('progress-screen')">🔥 Мой прогресс <span>→</span></button>
     </div>
 
     <div id="player-screen" class="screen player-screen">
@@ -208,7 +204,7 @@ button:hover {
         </div>
 
         <div class="video-container">
-            <video id="ex-video" src="" autoplay loop muted playsinline poster="https://via.placeholder.com/400x800/000000/FFFFFF/?text=Загрузите+видео"></video>
+            <video id="ex-video" src="" autoplay loop muted playsinline></video>
         </div>
 
         <div>
@@ -216,7 +212,16 @@ button:hover {
                 <span class="timer-label">Осталось времени</span>
                 <div class="timer" id="timer">30</div>
             </div>
-            <button class="btn-start" onclick="nextExercise()" style="margin-bottom: 0;">Завершить / Дальше →</button>
+            <button class="btn-start" onclick="nextExercise()" style="margin-bottom: 0;">Следующее упражнение →</button>
+        </div>
+    </div>
+
+    <div id="nutrition-screen" class="screen">
+        <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
+        <div class="logo">🍎 Основы питания</div>
+        <div class="subtitle">Полезные рекомендации</div>
+        <div style="background: var(--surface-color); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); color: var(--text-secondary);">
+            Следите за водным балансом и потреблением белка для наилучших результатов трансформации тела.
         </div>
     </div>
 
@@ -224,8 +229,7 @@ button:hover {
         <button class="back-btn" onclick="showScreen('main-screen')">← На главную</button>
         <div class="logo">🔥 Мой прогресс</div>
         <div class="subtitle">Ваша статистика и регулярность</div>
-        
-        <div style="background: var(--surface-color); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center; margin-bottom: 15px;">
+        <div style="background: var(--surface-color); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center;">
             <div style="font-size: 40px; font-weight: 800;">0 дней</div>
             <div style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">Серия тренировок (Streak)</div>
         </div>
@@ -244,23 +248,14 @@ function showScreen(screenId) {
     window.scrollTo(0, 0);
 }
 
-function openChannel() {
-    window.open('https://t.me/+7zIjdiWEi0M1YjMy', '_blank');
-}
-
-// Список твоих тренировок. 
-// Загрузи файлы video1.mp4, video2.mp4 и т.д. в репозиторий GitHub.
 const exercises = [
-    { title: "Для начала: 12 упражнений", video: "./video1.mp4", time: 45 },
-    { title: "Подвижность: активное растягивание", video: "./video2.mp4", time: 45 },
-    { title: "Сброс веса", video: "./video3.mp4", time: 45 },
-    { title: "Быть в форме", video: "./video4.mp4", time: 45 },
-    { title: "Специальные: после бега", video: "./video5.mp4", time: 45 },
-    { title: "К пляжу готов", video: "./video6.mp4", time: 45 },
-    { title: "Примите вызов: режим ракеты", video: "./video7.mp4", time: 60 },
-    { title: "Питание (Инфо)", video: "./video8.mp4", time: 30 },
-    { title: "Интервальное голодание (Инфо)", video: "./video9.mp4", time: 30 },
-    { title: "Музыка для тренировок", video: "./video10.mp4", time: 60 }
+    { title: "1. Для начала", video: "video1.mp4", time: 420 },
+    { title: "2. Подвижность", video: "video2.mp4", time: 420 },
+    { title: "3. Сброс веса", video: "video3.mp4", time: 420 },
+    { title: "4. Быть в форме", video: "video4.mp4", time: 420 },
+    { title: "5. Специальные тренировки", video: "video5.mp4", time: 420 },
+    { title: "6. К пляжу готов", video: "video6.mp4", time: 420 },
+    { title: "7. Режим ракеты", video: "video7.mp4", time: 460 }
 ];
 
 let currentExIndex = 0;
@@ -280,8 +275,7 @@ function loadExercise(index) {
     
     let videoElement = document.getElementById('ex-video');
     videoElement.src = ex.video;
-    // Пытаемся запустить видео
-    videoElement.play().catch(e => console.log("Ждем загрузки видео пользователем"));
+    videoElement.play().catch(e => console.log("Ожидание воспроизведения"));
 
     startTimer(ex.time);
 }
@@ -305,7 +299,7 @@ function nextExercise() {
     if (currentExIndex < exercises.length) {
         loadExercise(currentExIndex);
     } else {
-        alert('Отличная работа! Вы посмотрели все разделы.');
+        alert('Тренировка успешно завершена! Отличная работа.');
         showScreen('main-screen');
     }
 }
