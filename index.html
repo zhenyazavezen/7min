@@ -149,6 +149,7 @@
 
     <div class="section-title">Категории тренировок</div>
 
+    <!-- 1. Для начала -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/2/57', '1. Для начала (Бесплатно)')">
         <div class="card-info">
             <span class="card-icon">⚡</span>
@@ -156,6 +157,7 @@
         </div>
     </div>
 
+    <!-- 2. Подвижность -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/215/374', '2. Подвижность')">
         <div class="card-info">
             <span class="card-icon">🧘</span>
@@ -164,6 +166,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
+    <!-- 3. Сброс веса -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/87/91', '3. Сброс веса')">
         <div class="card-info">
             <span class="card-icon">🔥</span>
@@ -172,6 +175,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
+    <!-- 4. Быть в форме -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/144/376', '4. Быть в форме')">
         <div class="card-info">
             <span class="card-icon">⭐️</span>
@@ -180,6 +184,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
+    <!-- 5. Специальные -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/160/393', '5. Специальные')">
         <div class="card-info">
             <span class="card-icon">🎯</span>
@@ -188,6 +193,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
+    <!-- 6. К пляжу готов -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/113/119', '6. К пляжу готов')">
         <div class="card-info">
             <span class="card-icon">🏖️</span>
@@ -196,6 +202,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
+    <!-- 7. Примите вызов -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/142/398', '7. Примите вызов')">
         <div class="card-info">
             <span class="card-icon">🚀</span>
@@ -204,6 +211,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
+    <!-- 8. Питание -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/138/196', '8. Питание')">
         <div class="card-info">
             <span class="card-icon">🥗</span>
@@ -212,6 +220,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
+    <!-- 9. Интервальное голодание -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/137/198', '9. Интервальное голодание')">
         <div class="card-info">
             <span class="card-icon">⏱️</span>
@@ -220,6 +229,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
+    <!-- 10. Музыка -->
     <div class="card" onclick="openSection('https://t.me/c/2527751508/133/240', '10. Музыка')">
         <div class="card-info">
             <span class="card-icon">🎵</span>
@@ -228,16 +238,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
-    <div class="section-title">Дополнительно</div>
-
-    <div class="card" onclick="openSection('https://t.me/c/2527751508/138/196', 'Основы питания')">
-        <div class="card-info">
-            <span class="card-icon">🍎</span>
-            <span class="card-title">Основы питания</span>
-        </div>
-        <span class="lock-icon">🔒</span>
-    </div>
-
+    <!-- Модальное окно -->
     <div class="modal" id="payModal">
         <div class="modal-content">
             <div class="modal-title" id="modalTitle">Раздел заблокирован</div>
@@ -253,22 +254,17 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Ссылка для оплаты (твоя общая прокладка на канал сбора денег)
         const PAY_LINK = 'https://t.me/+y2_XMprwee9mNWEy';
-        
         let targetLink = '';
 
         function openSection(link, sectionName) {
-            // Запоминаем индивидуальную ссылку раздела
             targetLink = link;
             
-            // Если это первый раздел (бесплатный), можно открывать сразу без модалки оплаты:
             if (sectionName.includes('Бесплатно')) {
                 tg.openTelegramLink(link);
                 return;
             }
 
-            // Для остальных разделов показываем модальное окно блокировки
             document.getElementById('modalTitle').innerText = `Раздел "${sectionName}"`;
             document.getElementById('payModal').style.display = 'flex';
         }
@@ -278,8 +274,6 @@
         }
 
         function proceedToPayment() {
-            // Если пользователь еще не купил, можно перенаправлять либо на оплату (PAY_LINK), 
-            // либо сразу на целевой материал (если у него уже есть подписка):
             tg.openTelegramLink(PAY_LINK);
         }
     </script>
