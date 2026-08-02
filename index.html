@@ -7,17 +7,16 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            /* Подстраивается под темную/светлую тему Telegram */
-            --bg-color: var(--tg-theme-bg-color, #1c1d22);
-            --text-color: var(--tg-theme-text-color, #ffffff);
-            --hint-color: var(--tg-theme-hint-color, #707579);
-            --card-bg: var(--tg-theme-secondary-bg-color, #232e3c);
+            var(--bg-color: var(--tg-theme-bg-color, #1c1d22);
+            var(--text-color: var(--tg-theme-text-color, #ffffff);
+            var(--hint-color: var(--tg-theme-hint-color, #707579);
+            var(--card-bg: var(--tg-theme-secondary-bg-color, #232e3c);
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--tg-theme-bg-color, #1c1d22);
+            color: var(--tg-theme-text-color, #ffffff);
             margin: 0;
             padding: 16px;
             box-sizing: border-box;
@@ -37,14 +36,14 @@
 
         .header .subtitle {
             font-size: 14px;
-            color: var(--hint-color);
+            color: var(--tg-theme-hint-color, #707579);
             margin: 0;
         }
 
         .section-title {
             font-size: 13px;
             text-transform: uppercase;
-            color: var(--hint-color);
+            color: var(--tg-theme-hint-color, #707579);
             margin-bottom: 12px;
             letter-spacing: 0.5px;
             font-weight: 500;
@@ -57,7 +56,7 @@
         }
 
         .card {
-            background-color: var(--card-bg);
+            background-color: var(--tg-theme-secondary-bg-color, #232e3c);
             border-radius: 12px;
             padding: 16px;
             display: flex;
@@ -188,22 +187,22 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand(); // Открывает приложение на весь экран
+        tg.expand(); // Разворачиваем окно на максимум
 
         function handleCardClick(categoryId, isLocked) {
-            // Легкая вибрация телефона при клике
+            // Легкая вибрация телефона при клике (работает на большинстве смартфонов)
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('light');
             }
 
             if (isLocked) {
-                // Если категория под замком, перекидываем пользователя 
-                // на бота или запускаем процесс оплаты без лишних окон
-                tg.openTelegramLink("https://t.me/zhenya_zavezen_bot");
+                // Если категория под замком — СРАЗУ открываем ссылку на подписку
+                tg.openTelegramLink("https://t.me/+y2_XMprwee9mNWEy");
             } else {
                 console.log("Открыт раздел:", categoryId);
             }
         }
     </script>
 </body>
-</html>
+                    </html>
+                    
