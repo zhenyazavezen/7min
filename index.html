@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7Min Workout</title>
+    <title>7Min</title>
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -26,145 +26,125 @@
         }
 
         .header {
-            text-align: center;
             margin-bottom: 24px;
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
             margin: 0;
-            color: var(--accent-color);
-            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .header p {
             color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 4px;
+            font-size: 13px;
+            margin: 6px 0 0 0;
         }
 
-        .workout-card {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .badge {
-            background-color: rgba(255, 59, 48, 0.15);
-            color: var(--accent-color);
+        .section-title {
             font-size: 12px;
             font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-
-        .workout-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 0 0 6px 0;
-        }
-
-        .workout-meta {
             color: var(--text-secondary);
-            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            margin-top: 20px;
+        }
+
+        .category-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 16px 20px;
             margin-bottom: 12px;
             display: flex;
-            gap: 12px;
-        }
-
-        .description {
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d1d1d6;
-            margin-bottom: 16px;
-        }
-
-        .rules-box {
-            background-color: rgba(255, 255, 255, 0.03);
-            border-left: 3px solid var(--accent-color);
-            padding: 12px;
-            border-radius: 0 8px 8px 0;
-            font-size: 13px;
-            color: #e5e5ea;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .btn-start {
-            width: 100%;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.1s ease, opacity 0.2s ease;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            justify-content: space-between;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            text-decoration: none;
+            color: var(--text-color);
         }
 
-        .btn-start:active {
+        .category-card:active {
             transform: scale(0.98);
-            opacity: 0.9;
+            background-color: #2c2c2e;
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .arrow {
+            color: var(--text-secondary);
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>7Min Workout</h1>
-        <p>Система эффективных домашних тренировок</p>
+        <h1>💪 7Min</h1>
+        <p>Тренировки для трансформации тела</p>
     </div>
 
-    <!-- КАРТОЧКА ТРЕНИРОВКИ №1 -->
-    <div class="workout-card">
-        <span class="badge">🔥 Классика</span>
-        <h2 class="workout-title">Все тело</h2>
-        
-        <div class="workout-meta">
-            <span>⏱️ 07:50 мин</span>
-            <span>🏋️‍♂️ 12 упражнений</span>
-        </div>
+    <div class="section-title">Категории тренировок</div>
 
-        <p class="description">
-            Начните свое фитнес-путешествие с подборкой тренировок для всего тела, чтобы повысить общий уровень физподготовки.<br><br>
-            Научно доказано, что так обеспечиваются самые лучшие результаты в кратчайшие сроки. Этот классический ВИИТ имеет все необходимое для достижения ваших целей.
-        </p>
+    <!-- КАТЕГОРИЯ 1: Привязана к твоему защищенному видео -->
+    <div class="category-card" onclick="openPost('https://t.me/c/2527751508/2/57')">
+        <span class="category-title">⚡ 1. Для начала</span>
+        <span class="arrow">→</span>
+    </div>
 
-        <div class="rules-box">
-            <strong>Как тренироваться:</strong><br>
-            • Выполните каждое из 12 упражнений в течение 30 секунд.<br>
-            • 10 секунд отдыха между ними.<br>
-            • Интенсивность: 8/10 (до ощутимого дискомфорта).<br>
-            • Хорошая новость: вы закончите уже через 7 минут!
-        </div>
+    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+        <span class="category-title">🧘‍♂️ 2. Подвижность</span>
+        <span class="arrow">→</span>
+    </div>
 
-        <!-- Кнопка с твоей рабочей ссылкой на закрытый пост -->
-        <button class="btn-start" onclick="openPost('https://t.me/c/2527751508/2/57')">
-            ▶️ Смотреть видео
-        </button>
+    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+        <span class="category-title">🔥 3. Сброс веса</span>
+        <span class="arrow">→</span>
+    </div>
+
+    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+        <span class="category-title">🏋️‍♂️ 4. Быть в форме</span>
+        <span class="arrow">→</span>
+    </div>
+
+    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+        <span class="category-title">🎯 5. Специальные тренировки</span>
+        <span class="arrow">→</span>
+    </div>
+
+    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+        <span class="category-title">🏖️ 6. К пляжу готов</span>
+        <span class="arrow">→</span>
+    </div>
+
+    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+        <span class="category-title">🚀 7. Режим ракеты</span>
+        <span class="arrow">→</span>
+    </div>
+
+    <div class="section-title">Дополнительно</div>
+
+    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+        <span class="category-title">🍎 Основы питания</span>
+        <span class="arrow">→</span>
     </div>
 
     <script>
         // Инициализация Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем приложение на весь экран
+        tg.expand(); // Разворачиваем на полный экран
 
-        // Функция открытия ссылки на пост закрытой группы
+        // Функция безопасного открытия защищенного поста из группы
         function openPost(url) {
             if (tg.openTelegramLink) {
-                // Открывает пост прямо внутри Telegram без выхода в внешний браузер
                 tg.openTelegramLink(url);
             } else {
                 window.location.href = url;
