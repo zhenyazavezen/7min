@@ -7,12 +7,11 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: var(--tg-theme-bg-color, #121212);
+            /* Подстраивается под темную/светлую тему Telegram */
+            --bg-color: var(--tg-theme-bg-color, #1c1d22);
             --text-color: var(--tg-theme-text-color, #ffffff);
-            --hint-color: var(--tg-theme-hint-color, #aaaaaa);
-            --card-bg: var(--tg-theme-secondary-bg-color, #1e1e1e);
-            --button-color: var(--tg-theme-button-color, #2ea6ff);
-            --button-text: var(--tg-theme-button-text-color, #ffffff);
+            --hint-color: var(--tg-theme-hint-color, #707579);
+            --card-bg: var(--tg-theme-secondary-bg-color, #232e3c);
         }
 
         body {
@@ -26,31 +25,41 @@
             user-select: none;
         }
 
-        h1 {
-            font-size: 22px;
-            margin-top: 0;
-            margin-bottom: 4px;
+        .header {
+            margin-bottom: 24px;
         }
 
-        .subtitle {
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+
+        .header .subtitle {
             font-size: 14px;
             color: var(--hint-color);
-            margin-bottom: 20px;
+            margin: 0;
         }
 
         .section-title {
-            font-size: 12px;
+            font-size: 13px;
             text-transform: uppercase;
             color: var(--hint-color);
-            margin: 20px 0 10px 0;
+            margin-bottom: 12px;
             letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .card {
             background-color: var(--card-bg);
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 16px;
-            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -59,7 +68,7 @@
         }
 
         .card:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
             opacity: 0.8;
         }
 
@@ -71,6 +80,8 @@
 
         .card-icon {
             font-size: 22px;
+            width: 28px;
+            text-align: center;
         }
 
         .card-title {
@@ -79,81 +90,119 @@
         }
 
         .lock-icon {
-            font-size: 18px;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
 
-    <h1>7Min</h1>
-    <div class="subtitle">Тренировки для трансформации тела</div>
+    <div class="header">
+        <h1>7Min</h1>
+        <p class="subtitle">Тренировки для трансформации тела</p>
+    </div>
 
     <div class="section-title">Категории тренировок</div>
 
-    <!-- Категории -->
-    <div class="card" onclick="handleCardClick('1. Для начала', true)">
-        <div class="card-info">
-            <span class="card-icon">⚡</span>
-            <span class="card-title">1. Для начала</span>
+    <div class="card-list">
+        <div class="card" onclick="handleCardClick('1', true)">
+            <div class="card-info">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">1. Для начала</span>
+            </div>
+            <span class="lock-icon">🔒</span>
         </div>
-        <span class="lock-icon">🔒</span>
-    </div>
 
-    <div class="card" onclick="handleCardClick('2. Подвижность', true)">
-        <div class="card-info">
-            <span class="card-icon">🧘</span>
-            <span class="card-title">2. Подвижность</span>
+        <div class="card" onclick="handleCardClick('2', true)">
+            <div class="card-info">
+                <span class="card-icon">🧘</span>
+                <span class="card-title">2. Подвижность</span>
+            </div>
+            <span class="lock-icon">🔒</span>
         </div>
-        <span class="lock-icon">🔒</span>
-    </div>
 
-    <div class="card" onclick="handleCardClick('3. Сброс веса', true)">
-        <div class="card-info">
-            <span class="card-icon">🔥</span>
-            <span class="card-title">3. Сброс веса</span>
+        <div class="card" onclick="handleCardClick('3', true)">
+            <div class="card-info">
+                <span class="card-icon">🔥</span>
+                <span class="card-title">3. Сброс веса</span>
+            </div>
+            <span class="lock-icon">🔒</span>
         </div>
-        <span class="lock-icon">🔒</span>
-    </div>
 
-    <div class="card" onclick="handleCardClick('4. Быть в форме', true)">
-        <div class="card-info">
-            <span class="card-icon">⭐</span>
-            <span class="card-title">4. Быть в форме</span>
+        <div class="card" onclick="handleCardClick('4', true)">
+            <div class="card-info">
+                <span class="card-icon">⭐</span>
+                <span class="card-title">4. Быть в форме</span>
+            </div>
+            <span class="lock-icon">🔒</span>
         </div>
-        <span class="lock-icon">🔒</span>
+
+        <div class="card" onclick="handleCardClick('5', true)">
+            <div class="card-info">
+                <span class="card-icon">🎯</span>
+                <span class="card-title">5. Специальные</span>
+            </div>
+            <span class="lock-icon">🔒</span>
+        </div>
+
+        <div class="card" onclick="handleCardClick('6', true)">
+            <div class="card-info">
+                <span class="card-icon">⛱️</span>
+                <span class="card-title">6. К пляжу готов</span>
+            </div>
+            <span class="lock-icon">🔒</span>
+        </div>
+
+        <div class="card" onclick="handleCardClick('7', true)">
+            <div class="card-info">
+                <span class="card-icon">🚀</span>
+                <span class="card-title">7. Примите вызов</span>
+            </div>
+            <span class="lock-icon">🔒</span>
+        </div>
+
+        <div class="card" onclick="handleCardClick('8', true)">
+            <div class="card-info">
+                <span class="card-icon">🥗</span>
+                <span class="card-title">8. Питание</span>
+            </div>
+            <span class="lock-icon">🔒</span>
+        </div>
+
+        <div class="card" onclick="handleCardClick('9', true)">
+            <div class="card-info">
+                <span class="card-icon">⏱️</span>
+                <span class="card-title">9. Интервальное голодание</span>
+            </div>
+            <span class="lock-icon">🔒</span>
+        </div>
+
+        <div class="card" onclick="handleCardClick('10', true)">
+            <div class="card-info">
+                <span class="card-icon">🎵</span>
+                <span class="card-title">10. Музыка</span>
+            </div>
+            <span class="lock-icon">🔒</span>
+        </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
+        tg.expand(); // Открывает приложение на весь экран
 
-        // Главная функция при клике на категорию
-        function handleCardClick(title, isLocked) {
-            // Тактильный виброотклик смартфона
+        function handleCardClick(categoryId, isLocked) {
+            // Легкая вибрация телефона при клике
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('light');
             }
 
-            if (!isLocked) {
-                // Если раздел открыт — переходим к нему
-                openCategory(title);
+            if (isLocked) {
+                // Если категория под замком, перекидываем пользователя 
+                // на бота или запускаем процесс оплаты без лишних окон
+                tg.openTelegramLink("https://t.me/zhenya_zavezen_bot");
             } else {
-                // Если закрыт — СРАЗУ вызываем окно оплаты Telegram Stars без лишних "ОК"
-                startStarsPayment(title);
+                console.log("Открыт раздел:", categoryId);
             }
-        }
-
-        function startStarsPayment(title) {
-            // Если у тебя есть готовая ссылка на invoice от бота:
-            // tg.openInvoice("ССЫЛКА_НА_СЧЕТ_STARS", function(status) { ... });
-
-            // Для прямой подписки через бота:
-            tg.openTelegramLink("https://t.me/zhenya_zavezen_bot");
-        }
-
-        function openCategory(title) {
-            console.log("Открываем раздел:", title);
         }
     </script>
 </body>
