@@ -149,7 +149,7 @@
 
     <div class="section-title">Категории тренировок</div>
 
-    <div class="card" onclick="openFreeVideo('ССЫЛКА_НА_ПОСТ_С_ВИДЕО_В_БОТЕ')">
+    <div class="card" onclick="openFreeVideo('https://t.me/c/2527751508/2/57')">
         <div class="card-info">
             <span class="card-icon">⚡</span>
             <span class="card-title">1. Для начала (Бесплатно)</span>
@@ -245,10 +245,12 @@
 
         const PAY_LINK = 'https://t.me/+y2_XMprwee9mNWEy';
 
+        // Функция для открытия конкретного бесплатного видео
         function openFreeVideo(videoLink) {
             tg.openTelegramLink(videoLink);
         }
 
+        // Функция для показа окна оплаты для остальных разделов
         function openPayModal(sectionName) {
             document.getElementById('modalTitle').innerText = `Раздел "${sectionName}"`;
             document.getElementById('payModal').style.display = 'flex';
