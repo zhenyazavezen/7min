@@ -74,6 +74,10 @@
             background-color: #2c2c2e;
         }
 
+        .category-card.locked {
+            opacity: 0.7;
+        }
+
         .category-title {
             font-size: 16px;
             font-weight: 600;
@@ -94,60 +98,73 @@
 
     <div class="section-title">Категории тренировок</div>
 
-    <!-- КАТЕГОРИЯ 1: Привязана к твоему видео -->
+    <!-- Бесплатный ознакомительный раздел -->
     <div class="category-card" onclick="openPost('https://t.me/c/2527751508/2/57')">
-        <span class="category-title">⚡ 1. Для начала</span>
+        <span class="category-title">⚡ 1. Для начала (Бесплатно)</span>
         <span class="arrow">→</span>
     </div>
 
-    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+    <!-- Платные разделы с замком -->
+    <div class="category-card locked" onclick="requireSubscription('Подвижность')">
         <span class="category-title">🧘‍♂️ 2. Подвижность</span>
-        <span class="arrow">→</span>
+        <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+    <div class="category-card locked" onclick="requireSubscription('Сброс веса')">
         <span class="category-title">🔥 3. Сброс веса</span>
-        <span class="arrow">→</span>
+        <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+    <div class="category-card locked" onclick="requireSubscription('Быть в форме')">
         <span class="category-title">🏋️‍♂️ 4. Быть в форме</span>
-        <span class="arrow">→</span>
+        <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+    <div class="category-card locked" onclick="requireSubscription('Специальные тренировки')">
         <span class="category-title">🎯 5. Специальные тренировки</span>
-        <span class="arrow">→</span>
+        <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+    <div class="category-card locked" onclick="requireSubscription('К пляжу готов')">
         <span class="category-title">🏖️ 6. К пляжу готов</span>
-        <span class="arrow">→</span>
+        <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+    <div class="category-card locked" onclick="requireSubscription('Режим ракеты')">
         <span class="category-title">🚀 7. Режим ракеты</span>
-        <span class="arrow">→</span>
+        <span class="arrow">🔒</span>
     </div>
 
     <div class="section-title">Дополнительно</div>
 
-    <div class="category-card" onclick="alert('Этот раздел находится в разработке')">
+    <div class="category-card locked" onclick="requireSubscription('Основы питания')">
         <span class="category-title">🍎 Основы питания</span>
-        <span class="arrow">→</span>
+        <span class="arrow">🔒</span>
     </div>
 
     <script>
-        // Инициализация Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем на полный экран
+        tg.expand();
 
-        // Функция открытия защищенного поста из группы
+        // Открытие бесплатного видео
         function openPost(url) {
             if (tg.openTelegramLink) {
                 tg.openTelegramLink(url);
             } else {
                 window.location.href = url;
+            }
+        }
+
+        // Всплывающее окно для закрытых разделов
+        function requireSubscription(sectionName) {
+            if (tg.showPopup) {
+                tg.showPopup({
+                    title: '⭐ Доступ ограничен',
+                    message: `Раздел "${sectionName}" доступен по подписке. Оформите подписку в боте за Telegram Stars, чтобы открыть все 777+ тренировок!`,
+                    buttons: [{type: 'ok', text: 'Понятно'}]
+                });
+            } else {
+                alert(`Раздел "${sectionName}" доступен по подписке.`);
             }
         }
     </script>
