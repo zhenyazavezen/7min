@@ -75,7 +75,7 @@
         }
 
         .category-card.locked {
-            opacity: 0.7;
+            opacity: 0.8;
         }
 
         .category-title {
@@ -99,38 +99,38 @@
     <div class="section-title">Категории тренировок</div>
 
     <!-- Бесплатный ознакомительный раздел -->
-    <div class="category-card" onclick="openPost('https://t.me/c/2527751508/2/57')">
+    <div class="category-card" onclick="openLink('https://t.me/c/2527751508/2/57')">
         <span class="category-title">⚡ 1. Для начала (Бесплатно)</span>
         <span class="arrow">→</span>
     </div>
 
     <!-- Платные разделы с замком -->
-    <div class="category-card locked" onclick="requireSubscription('Подвижность')">
+    <div class="category-card locked" onclick="requireSubscription('2. Подвижность')">
         <span class="category-title">🧘‍♂️ 2. Подвижность</span>
         <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card locked" onclick="requireSubscription('Сброс веса')">
+    <div class="category-card locked" onclick="requireSubscription('3. Сброс веса')">
         <span class="category-title">🔥 3. Сброс веса</span>
         <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card locked" onclick="requireSubscription('Быть в форме')">
+    <div class="category-card locked" onclick="requireSubscription('4. Быть в форме')">
         <span class="category-title">🏋️‍♂️ 4. Быть в форме</span>
         <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card locked" onclick="requireSubscription('Специальные тренировки')">
+    <div class="category-card locked" onclick="requireSubscription('5. Специальные тренировки')">
         <span class="category-title">🎯 5. Специальные тренировки</span>
         <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card locked" onclick="requireSubscription('К пляжу готов')">
+    <div class="category-card locked" onclick="requireSubscription('6. К пляжу готов')">
         <span class="category-title">🏖️ 6. К пляжу готов</span>
         <span class="arrow">🔒</span>
     </div>
 
-    <div class="category-card locked" onclick="requireSubscription('Режим ракеты')">
+    <div class="category-card locked" onclick="requireSubscription('7. Режим ракеты')">
         <span class="category-title">🚀 7. Режим ракеты</span>
         <span class="arrow">🔒</span>
     </div>
@@ -146,8 +146,11 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Открытие бесплатного видео
-        function openPost(url) {
+        // Ссылка на оплату / вступление в подписку
+        const PAY_LINK = 'https://t.me/zhenya_zavezen_bot'; // При необходимости можно поменять на ссылку-приглашение
+
+        // Переход по прямой ссылке
+        function openLink(url) {
             if (tg.openTelegramLink) {
                 tg.openTelegramLink(url);
             } else {
@@ -155,16 +158,21 @@
             }
         }
 
-        // Всплывающее окно для закрытых разделов
+        // Подтверждение подписки
         function requireSubscription(sectionName) {
-            if (tg.showPopup) {
-                tg.showPopup({
-                    title: '⭐ Доступ ограничен',
-                    message: `Раздел "${sectionName}" доступен по подписке. Оформите подписку в боте за Telegram Stars, чтобы открыть все 777+ тренировок!`,
-                    buttons: [{type: 'ok', text: 'Понятно'}]
-                });
+            if (tg.showConfirm) {
+                tg.showConfirm(
+                    `Раздел "${sectionName}" доступен по подписке.\n\nПерейти к оформлению подписки за Telegram Stars?`, 
+                    function(ok) {
+                        if (ok) {
+                            openLink(PAY_LINK);
+                        }
+                    }
+                );
             } else {
-                alert(`Раздел "${sectionName}" доступен по подписке.`);
+                if (confirm(`Раздел "${sectionName}" доступен по подписке. Перейти к оформлению?`)) {
+                    openLink(PAY_LINK);
+                }
             }
         }
     </script>
