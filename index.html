@@ -291,13 +291,13 @@
         const PAY_LINK = 'https://t.me/+y2_XMprwee9mNWEy';
         const SUPPORT_LINK = 'https://t.me/zhenya_zavezen';
 
-        // Данные категорий и подпунктов (16 упражнений для раздела 1)
+        // Данные категорий и подпунктов (Все разделы теперь платные)
         const categories = [
             { 
                 id: 1, 
                 title: '1. Для начала', 
                 icon: '⚡', 
-                free: true,
+                free: false, // <-- Теперь этот раздел тоже под замком!
                 exercises: [
                     { id: 1, title: '1. Комплексная разминка', duration: '45 сек', link: 'https://t.me/c/123456789/1' },
                     { id: 2, title: '2. Приседания классические', duration: '60 сек', link: 'https://t.me/c/123456789/2' },
@@ -468,5 +468,4 @@
                 btn.innerText = 'Пауза';
                 playSound('beep');
                 
-                timerInterval = setInterval(() => {
-                    timeLeft--;
+                timerInterval = setInter
