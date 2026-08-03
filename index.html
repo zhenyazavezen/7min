@@ -296,7 +296,7 @@
                 id: 1, 
                 title: '1. Для начала', 
                 icon: '⚡', 
-                free: true, // Первая категория открыта для всех
+                free: true,
                 exercises: [
                     { id: 1, title: '1. Комплексная разминка', duration: '45 сек', link: 'https://t.me/c/123456789/1' },
                     { id: 2, title: '2. Приседания классические', duration: '60 сек', link: 'https://t.me/c/123456789/2' },
@@ -327,7 +327,6 @@
             { id: 10, title: '10. Музыка', icon: '🎵', free: false }
         ];
 
-        // Безопасная загрузка данных из памяти устройства
         let isPaid = false;
         try {
             isPaid = localStorage.getItem('7min_is_paid') === 'true';
@@ -345,7 +344,6 @@
             if (saved) stats = JSON.parse(saved);
         } catch(e) {}
 
-        // Звуки отсчета
         function playSound(type) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -368,7 +366,6 @@
             } catch(e) {}
         }
 
-        // Отрисовка Категорий
         function renderCategories() {
             const list = document.getElementById('categories-list');
             if (!list) return;
@@ -402,7 +399,6 @@
             });
         }
 
-        // Открытие списка упражнений категории
         function openExerciseList(category) {
             try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
             document.getElementById('view-categories').style.display = 'none';
@@ -435,7 +431,6 @@
             document.getElementById('view-categories').style.display = 'block';
         }
 
-        // Оплата
         function openPayModal() {
             try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
             document.getElementById('pay-modal').classList.add('active');
@@ -454,7 +449,6 @@
             }
         }
 
-        // Плеер / Таймер
         let timerInterval = null;
         let timeLeft = 420;
         let isRunning = false;
@@ -472,4 +466,12 @@
             };
 
             timeLeft = 420;
-            updateTim
+            updateTimerDisplay();
+            document.getElementById('workout-modal').classList.add('active');
+        }
+
+        function toggleTimer() {
+            let btn = document.getElementById('btn-timer-toggle');
+
+            if (!isRunning) {
+           
