@@ -171,14 +171,15 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Ссылка на ваш платный канал для оплаты
+        // Ваша ссылка на канал с подпиской
         const PAY_LINK = 'https://t.me/+y2_XMprwee9mNWEy';
 
+        // Единая функция для открытия окна оплаты
         function openSubscription() {
-            // Легкая вибрация для приятного отклика
+            // Легкая вибрация при клике
             tg.HapticFeedback.impactOccurred('medium');
             
-            // Сразу открываем системную шторку оплаты Telegram Stars
+            // Мгновенно открываем шторку с каналом (оплатой)
             tg.openTelegramLink(PAY_LINK);
         }
     </script>
