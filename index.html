@@ -103,92 +103,52 @@
 <body>
 
     <h1>💪 Seven</h1>
-    <div class="subtitle" id="subtitle">Тренировки для трансформации тела</div>
+    <div class="subtitle" id="subtitle">Загрузка данных профиля...</div>
 
-    <!-- Кнопка вызова оплаты -->
-    <button class="buy-banner" id="buyBtn" onclick="openSubscription()">
+    <button class="buy-banner" id="buyBtn" onclick="openSubscription()" style="display: none;">
         Разблокировать все разделы ⭐️
     </button>
 
     <div class="section-title">Категории тренировок</div>
 
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">⚡</span>
-            <span class="card-title">1. Для начала</span>
-        </div>
+        <div class="card-info"><span class="card-icon">⚡</span><span class="card-title">1. Для начала</span></div>
         <span class="lock-icon">🔒</span>
     </div>
-
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">🧘</span>
-            <span class="card-title">2. Подвижность</span>
-        </div>
+        <div class="card-info"><span class="card-icon">🧘</span><span class="card-title">2. Подвижность</span></div>
         <span class="lock-icon">🔒</span>
     </div>
-
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">🔥</span>
-            <span class="card-title">3. Сброс веса</span>
-        </div>
+        <div class="card-info"><span class="card-icon">🔥</span><span class="card-title">3. Сброс веса</span></div>
         <span class="lock-icon">🔒</span>
     </div>
-
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">⭐️</span>
-            <span class="card-title">4. Быть в форме</span>
-        </div>
+        <div class="card-info"><span class="card-icon">⭐️</span><span class="card-title">4. Быть в форме</span></div>
         <span class="lock-icon">🔒</span>
     </div>
-
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">🎯</span>
-            <span class="card-title">5. Специальные</span>
-        </div>
+        <div class="card-info"><span class="card-icon">🎯</span><span class="card-title">5. Специальные</span></div>
         <span class="lock-icon">🔒</span>
     </div>
-
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">🏖️</span>
-            <span class="card-title">6. К пляжу готов</span>
-        </div>
+        <div class="card-info"><span class="card-icon">🏖️</span><span class="card-title">6. К пляжу готов</span></div>
         <span class="lock-icon">🔒</span>
     </div>
-
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">🚀</span>
-            <span class="card-title">7. Примите вызов</span>
-        </div>
+        <div class="card-info"><span class="card-icon">🚀</span><span class="card-title">7. Примите вызов</span></div>
         <span class="lock-icon">🔒</span>
     </div>
-
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">🥗</span>
-            <span class="card-title">8. Питание</span>
-        </div>
+        <div class="card-info"><span class="card-icon">🥗</span><span class="card-title">8. Питание</span></div>
         <span class="lock-icon">🔒</span>
     </div>
-
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">⏱️</span>
-            <span class="card-title">9. Интервальное голодание</span>
-        </div>
+        <div class="card-info"><span class="card-icon">⏱️</span><span class="card-title">9. Интервальное голодание</span></div>
         <span class="lock-icon">🔒</span>
     </div>
-
     <div class="card" onclick="openSubscription()">
-        <div class="card-info">
-            <span class="card-icon">🎵</span>
-            <span class="card-title">10. Музыка</span>
-        </div>
+        <div class="card-info"><span class="card-icon">🎵</span><span class="card-title">10. Музыка</span></div>
         <span class="lock-icon">🔒</span>
     </div>
 
@@ -196,62 +156,77 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Ссылка на счет за товар (100 Stars)
         const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
+        const DEV_USERNAME = 'zhenya_zavezen';
 
-        // Проверяем статус доступа при загрузке
+        // Проверяем статус при запуске приложения
         document.addEventListener("DOMContentLoaded", () => {
-            if (localStorage.getItem('isPremium') === 'true') {
+            const user = tg.initDataUnsafe?.user;
+            const currentUsername = user?.username ? user.username.toLowerCase() : '';
+
+            // 1. Если зашел ты (разработчик)
+            if (currentUsername === DEV_USERNAME.toLowerCase()) {
                 unlockAll();
-            }
-        });
-
-        // Функция покупки
-        function openSubscription() {
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-
-            // Если уже куплено — не вызываем счет
-            if (localStorage.getItem('isPremium') === 'true') {
-                tg.showAlert('Раздел открыт! Приятной тренировки 💪');
+                document.getElementById('subtitle').innerHTML = 'Статус: <b style="color: #2ea6ff;">Режим разработчика (@zhenya_zavezen)</b>';
                 return;
             }
 
-            // Вызов нативного окна оплаты Telegram
-            tg.openInvoice(INVOICE_LINK, (status) => {
-                if (status === 'paid') {
-                    if (tg.HapticFeedback) {
-                        tg.HapticFeedback.notificationOccurred('success');
-                    }
-                    localStorage.setItem('isPremium', 'true');
+            // 2. Если обычный пользователь — запрашиваем статус из облака Telegram
+            tg.CloudStorage.getItem('isPremium', (err, value) => {
+                if (!err && value === 'true') {
                     unlockAll();
-                    tg.showAlert('🎉 Оплата прошла успешно! Полный доступ в Seven разблокирован.');
-                } else if (status === 'failed') {
-                    if (tg.HapticFeedback) {
-                        tg.HapticFeedback.notificationOccurred('error');
-                    }
-                    tg.showAlert('Не удалось провести платеж. Попробуйте еще раз.');
+                } else {
+                    // Если не куплено, показываем кнопку покупки
+                    document.getElementById('buyBtn').style.display = 'block';
+                    document.getElementById('subtitle').innerHTML = 'Тренировки для трансформации тела';
                 }
+            });
+        });
+
+        function openSubscription() {
+            const user = tg.initDataUnsafe?.user;
+            const currentUsername = user?.username ? user.username.toLowerCase() : '';
+
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+            if (currentUsername === DEV_USERNAME.toLowerCase()) {
+                tg.showAlert('Режим разработчика активен. Доступ бесплатный!');
+                return;
+            }
+
+            // Проверяем перед оплатой через облако
+            tg.CloudStorage.getItem('isPremium', (err, value) => {
+                if (!err && value === 'true') {
+                    unlockAll();
+                    tg.showAlert('У вас уже активирован PREMIUM доступ! Приятной тренировки 💪');
+                    return;
+                }
+
+                // Вызов счета Telegram Stars
+                tg.openInvoice(INVOICE_LINK, (status) => {
+                    if (status === 'paid') {
+                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                        
+                        // Сохраняем покупку НАВСЕГДА в облако Telegram аккаунта пользователя
+                        tg.CloudStorage.setItem('isPremium', 'true', (err, saved) => {
+                            if (saved) {
+                                unlockAll();
+                                tg.showAlert('🎉 Оплата прошла успешно! Подписка привязана к вашему аккаунту Telegram.');
+                            }
+                        });
+                    } else if (status === 'failed') {
+                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+                        tg.showAlert('Не удалось провести платеж. Попробуйте еще раз.');
+                    }
+                });
             });
         }
 
-        // Функция открытия всех разделов
         function unlockAll() {
-            const lockIcons = document.querySelectorAll('.lock-icon');
-            lockIcons.forEach(icon => {
-                icon.textContent = '▶️';
-            });
-
+            document.querySelectorAll('.lock-icon').forEach(icon => icon.textContent = '▶️');
             const buyBtn = document.getElementById('buyBtn');
-            if (buyBtn) {
-                buyBtn.style.display = 'none';
-            }
-
-            const subtitle = document.getElementById('subtitle');
-            if (subtitle) {
-                subtitle.innerHTML = 'Статус: <b style="color: #32d74b;">PREMIUM доступ активирован</b>';
-            }
+            if (buyBtn) buyBtn.style.display = 'none';
+            document.getElementById('subtitle').innerHTML = 'Статус: <b style="color: #32d74b;">PREMIUM доступ активирован</b>';
         }
     </script>
 </body>
