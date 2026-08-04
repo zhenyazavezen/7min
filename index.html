@@ -330,18 +330,18 @@
             const user = tg.initDataUnsafe?.user;
             const currentUsername = user?.username ? user.username.toLowerCase() : '';
 
+            // Проверка на разработчика
             if (currentUsername === DEV_USERNAME.toLowerCase()) {
-                isSubscribed = true;
                 unlockAll('Режим разработчика (@zhenya_zavezen)');
                 renderWorkoutsList();
                 return;
             }
 
+            // Проверка обычной подписки через CloudStorage
             tg.CloudStorage.getItem('subscription_expires', (err, expireDateStr) => {
                 const now = new Date().getTime();
 
                 if (!err && expireDateStr && now < Number(expireDateStr)) {
-                    isSubscribed = true;
                     unlockAll('PREMIUM доступ активен');
                 } else {
                     document.getElementById('buyBtn').style.display = 'block';
@@ -393,10 +393,8 @@
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
             if (isSubscribed) {
-                // Открываем видео в Telegram
                 tg.openTelegramLink(url);
             } else {
-                // Если нет подписки — предлагаем купить
                 openSubscription();
             }
         }
@@ -421,7 +419,6 @@
 
                     tg.CloudStorage.setItem('subscription_expires', String(expiresAt), (err, saved) => {
                         if (saved) {
-                            isSubscribed = true;
                             unlockAll('PREMIUM доступ активирован на 30 дней');
                             renderWorkoutsList();
                             tg.showAlert('🎉 Оплата прошла успешно! Подписка оформлена на 1 месяц.');
