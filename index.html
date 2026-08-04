@@ -208,40 +208,42 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
+        // Ссылка на счет за товар (100 Stars)
         const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
-        
-        // Твой ник разработчика (без @)
-        const DEV_USERNAME = 'zhenya_zavezen'; 
 
-        // Проверяем доступ при загрузке
+        // Имя пользователя разработчика
+        const DEV_USERNAME = 'zhenya_zavezen';
+
+        // Проверяем статус доступа при загрузке
         document.addEventListener("DOMContentLoaded", () => {
-            // Получаем ник текущего пользователя из Telegram
-            const userUsername = tg.initDataUnsafe?.user?.username;
+            const currentUsername = tg.initDataUnsafe?.user?.username;
 
-            // Если зашёл разработчик ИЛИ у обычного юзера есть оплата в localStorage
-            if (userUsername === DEV_USERNAME || localStorage.getItem('isPremium') === 'true') {
+            // Если зашел разработчик
+            if (currentUsername === DEV_USERNAME) {
                 unlockAll();
-
-                // Показываем подпись, если это именно ты
-                if (userUsername === DEV_USERNAME) {
-                    const subtitle = document.getElementById('subtitle');
-                    if (subtitle) {
-                        subtitle.innerHTML = 'Статус: <b style="color: #2ea6ff;">Режим разработчика (@zhenya_zavezen)</b>';
-                    }
+                const subtitle = document.getElementById('subtitle');
+                if (subtitle) {
+                    subtitle.innerHTML = 'Статус: <b style="color: #2ea6ff;">Режим разработчика (@zhenya_zavezen)</b>';
                 }
+                return;
+            }
+
+            // Проверка оплаты для обычных пользователей
+            if (localStorage.getItem('isPremium') === 'true') {
+                unlockAll();
             }
         });
 
-        // Функция покупки
+        // Функция покупки / открытий
         function openSubscription() {
-            const userUsername = tg.initDataUnsafe?.user?.username;
+            const currentUsername = tg.initDataUnsafe?.user?.username;
 
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
 
-            // Если ты разработчик или пользователь оплатил — не вызываем счет
-            if (userUsername === DEV_USERNAME || localStorage.getItem('isPremium') === 'true') {
+            // Если ты разработчик или у юзера куплен премиум
+            if (currentUsername === DEV_USERNAME || localStorage.getItem('isPremium') === 'true') {
                 tg.showAlert('Раздел открыт! Приятной тренировки 💪');
                 return;
             }
