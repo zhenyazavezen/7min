@@ -1,4 +1,416 @@
-tg.openInvoice(INVOICE_LINK, (status) => {
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seven — Тренировки</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg-color: var(--tg-theme-bg-color, #121212);
+            --text-color: var(--tg-theme-text-color, #ffffff);
+            --hint-color: var(--tg-theme-hint-color, #aaaaaa);
+            --card-bg: var(--tg-theme-secondary-bg-color, #1e1e1e);
+            --button-color: var(--tg-theme-button-color, #2ea6ff);
+            --button-text: var(--tg-theme-button-text-color, #ffffff);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 16px;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--hint-color);
+            margin-bottom: 16px;
+        }
+
+        .buy-banner {
+            background-color: var(--button-color);
+            color: var(--button-text);
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(46, 166, 255, 0.3);
+            transition: transform 0.1s ease;
+        }
+
+        .buy-banner:active {
+            transform: scale(0.98);
+        }
+
+        .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--hint-color);
+            margin: 20px 0 10px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            font-size: 24px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .lock-icon {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        /* Стили для экрана подразделов тренировок */
+        .workout-card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .workout-card:active {
+            transform: scale(0.98);
+        }
+
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .workout-name {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .workout-meta {
+            font-size: 13px;
+            color: var(--button-color);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .workout-desc {
+            font-size: 14px;
+            color: var(--hint-color);
+            line-height: 1.4;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: var(--button-color);
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <div id="main-screen">
+        <h1>💪 Seven</h1>
+        <div class="subtitle" id="subtitle">Проверка подписки...</div>
+
+        <button class="buy-banner" id="buyBtn" onclick="openSubscription()" style="display: none;">
+            Разблокировать на 1 месяц ⭐️
+        </button>
+
+        <div class="section-title">Категории тренировок</div>
+
+        <!-- Клик по первому разделу открывает подразделы -->
+        <div class="card" onclick="openCategory('start')">
+            <div class="card-info"><span class="card-icon">⚡</span><span class="card-title">1. Для начала</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+        <div class="card" onclick="openSubscription()">
+            <div class="card-info"><span class="card-icon">🧘</span><span class="card-title">2. Подвижность</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+        <div class="card" onclick="openSubscription()">
+            <div class="card-info"><span class="card-icon">🔥</span><span class="card-title">3. Сброс веса</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+        <div class="card" onclick="openSubscription()">
+            <div class="card-info"><span class="card-icon">⭐️</span><span class="card-title">4. Быть в форме</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+        <div class="card" onclick="openSubscription()">
+            <div class="card-info"><span class="card-icon">🎯</span><span class="card-title">5. Специальные</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+        <div class="card" onclick="openSubscription()">
+            <div class="card-info"><span class="card-icon">🏖️</span><span class="card-title">6. К пляжу готов</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+        <div class="card" onclick="openSubscription()">
+            <div class="card-info"><span class="card-icon">🚀</span><span class="card-title">7. Примите вызов</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+        <div class="card" onclick="openSubscription()">
+            <div class="card-info"><span class="card-icon">🥗</span><span class="card-title">8. Питание</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+        <div class="card" onclick="openSubscription()">
+            <div class="card-info"><span class="card-icon">⏱️</span><span class="card-title">9. Интервальное голодание</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+        <div class="card" onclick="openSubscription()">
+            <div class="card-info"><span class="card-icon">🎵</span><span class="card-title">10. Музыка</span></div>
+            <span class="lock-icon main-lock">🔒</span>
+        </div>
+    </div>
+
+    <!-- ЭКРАН ПОДРАЗДЕЛОВ («Для начала») -->
+    <div id="sub-screen" class="hidden">
+        <button class="back-btn" onclick="goBackToMain()">← Назад к категориям</button>
+        <h1>⚡ Для начала</h1>
+        <div class="subtitle">Выберите тренировку для старта</div>
+
+        <div id="workouts-list">
+            <!-- Сюда динамически подгружаются тренировки -->
+        </div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
+        const DEV_USERNAME = 'zhenya_zavezen';
+        let isSubscribed = false;
+
+        // Данные для раздела «Для начала»
+        const startWorkouts = [
+            {
+                title: "Все тело",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Научно доказано, что так обеспечиваются самые лучшие результаты в кратчайшие сроки. Этот классический ВИТ имеет все необходимое для достижения ваших целей.",
+                link: "https://t.me/c/2527751508/2/57"
+            },
+            {
+                title: "Верхняя часть",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Руки, плечи, грудь и верхняя часть спины всего здесь есть отличные тренировки.",
+                link: "https://t.me/c/2527751508/2/58"
+            },
+            {
+                title: "Нижняя часть",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Цель этой тренировки ягодицы и ноги с идеальным балансом силы и кардио.",
+                link: "https://t.me/c/2527751508/2/65"
+            },
+            {
+                title: "Гибкость",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Увеличьте амплитуду движений и уменьшите ограничения мышц с помощью этого упражнения на растяжение всего корпуса.",
+                link: "https://t.me/c/2527751508/2/70"
+            },
+            {
+                title: "Учебка",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Сосредоточьтесь на основных группах мышц. Попробуйте высокоинтенсивную тренировку, которая заставит вас попотеть.",
+                link: "https://t.me/c/2527751508/2/71"
+            },
+            {
+                title: "Спина и передняя часть",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Если давать каждой половине тела отдохнуть по очереди, вы сможете быстрее восстановиться между упражнениями. И выложиться ещё больше.",
+                link: "https://t.me/c/2527751508/2/72"
+            },
+            {
+                title: "Верх и низ",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Если давать каждой половине тела отдохнуть по очереди, вы сможете быстрее восстановиться между упражнениями. И выложиться ещё больше.",
+                link: "https://t.me/c/2527751508/2/73"
+            },
+            {
+                title: "Легкая форма",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Приведите себя в форму, выполняя эту простую тренировку, которая подойдет любому.",
+                link: "https://t.me/c/2527751508/2/74"
+            },
+            {
+                title: "Функциональная (новичок)",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Доведите каждую часть своего тела до предела возможностей при помощи этих разнообразных функциональных движений.",
+                link: "https://t.me/c/2527751508/2/75"
+            },
+            {
+                title: "На четвереньках",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Этот набор упражнений на полу уменьшает риск травм, а также помогает поддерживать себя в должной форме и формировать сильное тело.",
+                link: "https://t.me/c/2527751508/2/81"
+            },
+            {
+                title: "Разогрев",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Отличный способ начать день. Разогрейте мышцы и суставы для лучших результатов.",
+                link: "https://t.me/c/2527751508/2/82"
+            },
+            {
+                title: "Я здесь первый раз",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Впервые в Seven? Эти простые упражнения выработают новую привычку на всю жизнь!",
+                link: "https://t.me/c/2527751508/2/83"
+            },
+            {
+                title: "Старший",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Никогда не поздно для силовых тренировок. Эта тренировка подойдет любому новичку, а также специально разработана для тех, кому больше 65 лет.",
+                link: "https://t.me/c/2527751508/2/84"
+            },
+            {
+                title: "Работа над корпусом",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Ищете идеальное начало для своего фитнес-курса? Вы его нашли!",
+                link: "https://t.me/c/2527751508/2/85"
+            },
+            {
+                title: "Малая ударная нагрузка",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Прокачайте свою кровь и укрепите мышцы с помощью этой комфортной для суставов тренировки.",
+                link: "https://t.me/c/2527751508/2/86"
+            }
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = tg.initDataUnsafe?.user;
+            const currentUsername = user?.username ? user.username.toLowerCase() : '';
+
+            // Проверка на разработчика
+            if (currentUsername === DEV_USERNAME.toLowerCase()) {
+                unlockAll('Режим разработчика (@zhenya_zavezen)');
+                renderWorkoutsList();
+                return;
+            }
+
+            // Проверка обычной подписки через CloudStorage
+            tg.CloudStorage.getItem('subscription_expires', (err, expireDateStr) => {
+                const now = new Date().getTime();
+
+                if (!err && expireDateStr && now < Number(expireDateStr)) {
+                    unlockAll('PREMIUM доступ активен');
+                } else {
+                    document.getElementById('buyBtn').style.display = 'block';
+                    document.getElementById('subtitle').innerHTML = 'Тренировки для трансформации тела';
+                }
+                renderWorkoutsList();
+            });
+        });
+
+        // Отрисовка списка тренировок в подразделе
+        function renderWorkoutsList() {
+            const container = document.getElementById('workouts-list');
+            container.innerHTML = '';
+
+            startWorkouts.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'workout-card';
+                card.onclick = () => handleWorkoutClick(item.link);
+
+                card.innerHTML = `
+                    <div class="workout-header">
+                        <span class="workout-name">${item.title}</span>
+                        <span class="lock-icon">${isSubscribed ? '▶️' : '🔒'}</span>
+                    </div>
+                    <div class="workout-meta">${item.meta}</div>
+                    <div class="workout-desc">${item.desc}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Переключение экранов
+        function openCategory(categoryName) {
+            if (categoryName === 'start') {
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+                document.getElementById('main-screen').classList.add('hidden');
+                document.getElementById('sub-screen').classList.remove('hidden');
+            }
+        }
+
+        function goBackToMain() {
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            document.getElementById('sub-screen').classList.add('hidden');
+            document.getElementById('main-screen').classList.remove('hidden');
+        }
+
+        // Клик по конкретной тренировке
+        function handleWorkoutClick(url) {
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+            if (isSubscribed) {
+                tg.openTelegramLink(url);
+            } else {
+                openSubscription();
+            }
+        }
+
+        function openSubscription() {
+            const user = tg.initDataUnsafe?.user;
+            const currentUsername = user?.username ? user.username.toLowerCase() : '';
+
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+            if (currentUsername === DEV_USERNAME.toLowerCase()) {
+                tg.showAlert('Режим разработчика активен. Доступ бесплатный!');
+                return;
+            }
+
+            tg.openInvoice(INVOICE_LINK, (status) => {
                 if (status === 'paid') {
                     if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
                     
