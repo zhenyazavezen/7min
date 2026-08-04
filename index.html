@@ -22,6 +22,7 @@
             margin: 0;
             padding: 16px;
             box-sizing: border-box;
+            user-select: none;
         }
 
         h1 {
@@ -32,7 +33,26 @@
         .subtitle {
             font-size: 14px;
             color: var(--hint-color);
+            margin-bottom: 16px;
+        }
+
+        .buy-banner {
+            background-color: var(--button-color);
+            color: var(--button-text);
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
             margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(46, 166, 255, 0.3);
+            transition: transform 0.1s ease;
+        }
+
+        .buy-banner:active {
+            transform: scale(0.98);
         }
 
         .section-title {
@@ -83,7 +103,12 @@
 <body>
 
     <h1>💪 7Min</h1>
-    <div class="subtitle">Тренировки для трансформации тела</div>
+    <div class="subtitle" id="subtitle">Тренировки для трансформации тела</div>
+
+    <!-- Кнопка вызова оплаты -->
+    <button class="buy-banner" id="buyBtn" onclick="openSubscription()">
+        Разблокировать все разделы ⭐️
+    </button>
 
     <div class="section-title">Категории тренировок</div>
 
@@ -171,16 +196,62 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Ваша ссылка на канал с подпиской
-        const PAY_LINK = 'https://t.me/+y2_XMprwee9mNWEy';
+        // Ссылка на счет за товар (100 Stars)
+        const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
 
-        // Единая функция для открытия окна оплаты
+        // Проверяем статус доступа при загрузке
+        document.addEventListener("DOMContentLoaded", () => {
+            if (localStorage.getItem('isPremium') === 'true') {
+                unlockAll();
+            }
+        });
+
+        // Функция покупки
         function openSubscription() {
-            // Легкая вибрация при клике
-            tg.HapticFeedback.impactOccurred('medium');
-            
-            // Мгновенно открываем шторку с каналом (оплатой)
-            tg.openTelegramLink(PAY_LINK);
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+
+            // Если уже куплено — не вызываем счет
+            if (localStorage.getItem('isPremium') === 'true') {
+                tg.showAlert('Раздел открыт! Приятной тренировки 💪');
+                return;
+            }
+
+            // Вызов нативного окна оплаты Telegram
+            tg.openInvoice(INVOICE_LINK, (status) => {
+                if (status === 'paid') {
+                    if (tg.HapticFeedback) {
+                        tg.HapticFeedback.notificationOccurred('success');
+                    }
+                    localStorage.setItem('isPremium', 'true');
+                    unlockAll();
+                    tg.showAlert('🎉 Оплата прошла успешно! Полный доступ в 7Min разблокирован.');
+                } else if (status === 'failed') {
+                    if (tg.HapticFeedback) {
+                        tg.HapticFeedback.notificationOccurred('error');
+                    }
+                    tg.showAlert('Не удалось провести платеж. Попробуйте еще раз.');
+                }
+            });
+        }
+
+        // Функция открытия всех разделов
+        function unlockAll() {
+            const lockIcons = document.querySelectorAll('.lock-icon');
+            lockIcons.forEach(icon => {
+                icon.textContent = '▶️';
+            });
+
+            const buyBtn = document.getElementById('buyBtn');
+            if (buyBtn) {
+                buyBtn.style.display = 'none';
+            }
+
+            const subtitle = document.getElementById('subtitle');
+            if (subtitle) {
+                subtitle.innerHTML = 'Статус: <b style="color: #32d74b;">PREMIUM доступ активирован</b>';
+            }
         }
     </script>
 </body>
