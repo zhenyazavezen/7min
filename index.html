@@ -184,7 +184,8 @@
         <span class="lock-icon">🔒</span>
     </div>
 
-    <div class="card" onclick="openSubscription()">
+    <!-- Карточка "Музыка" с ID для отслеживания кликов разработчика -->
+    <div class="card" id="musicCard" onclick="handleCategoryClick(event)">
         <div class="card-info">
             <span class="card-icon">🎵</span>
             <span class="card-title">10. Музыка</span>
@@ -199,12 +200,47 @@
         // Ссылка на счет за товар (100 Stars)
         const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
 
+        // Переменные для секретного режима разработчика (7 кликов)
+        let musicClickCount = 0;
+        let musicClickTimer = null;
+
         // Проверяем статус доступа при загрузке
         document.addEventListener("DOMContentLoaded", () => {
             if (localStorage.getItem('isPremium') === 'true') {
                 unlockAll();
             }
         });
+
+        // Функция обработки клика по категории "Музыка"
+        function handleCategoryClick(event) {
+            // Если премиум еще не включен, считаем секретные клики
+            if (localStorage.getItem('isPremium') !== 'true') {
+                musicClickCount++;
+
+                // Сбрасываем счетчик, если между кликами прошло более 3 секунд
+                clearTimeout(musicClickTimer);
+                musicClickTimer = setTimeout(() => {
+                    musicClickCount = 0;
+                }, 3000);
+
+                // Если нажали 7 раз
+                if (musicClickCount === 7) {
+                    musicClickCount = 0;
+                    localStorage.setItem('isPremium', 'true');
+                    
+                    if (tg.HapticFeedback) {
+                        tg.HapticFeedback.notificationOccurred('success');
+                    }
+                    
+                    unlockAll();
+                    tg.showAlert('🔓 Режим разработчика активирован! Все разделы разблокированы.');
+                    return;
+                }
+            }
+
+            // Обычное поведение — вызов подписки
+            openSubscription();
+        }
 
         // Функция покупки
         function openSubscription() {
