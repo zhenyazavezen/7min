@@ -103,10 +103,10 @@
 <body>
 
     <h1>💪 Seven</h1>
-    <div class="subtitle" id="subtitle">Загрузка данных профиля...</div>
+    <div class="subtitle" id="subtitle">Проверка подписки...</div>
 
     <button class="buy-banner" id="buyBtn" onclick="openSubscription()" style="display: none;">
-        Разблокировать все разделы ⭐️
+        Разблокировать на 1 месяц ⭐️
     </button>
 
     <div class="section-title">Категории тренировок</div>
@@ -159,24 +159,25 @@
         const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
         const DEV_USERNAME = 'zhenya_zavezen';
 
-        // Проверяем статус при запуске приложения
         document.addEventListener("DOMContentLoaded", () => {
             const user = tg.initDataUnsafe?.user;
             const currentUsername = user?.username ? user.username.toLowerCase() : '';
 
-            // 1. Если зашел ты (разработчик)
+            // 1. Твой личный доступ разработчика
             if (currentUsername === DEV_USERNAME.toLowerCase()) {
-                unlockAll();
-                document.getElementById('subtitle').innerHTML = 'Статус: <b style="color: #2ea6ff;">Режим разработчика (@zhenya_zavezen)</b>';
+                unlockAll('Режим разработчика (@zhenya_zavezen)');
                 return;
             }
 
-            // 2. Если обычный пользователь — запрашиваем статус из облака Telegram
-            tg.CloudStorage.getItem('isPremium', (err, value) => {
-                if (!err && value === 'true') {
-                    unlockAll();
+            // 2. Проверка срока подписки из облака Telegram
+            tg.CloudStorage.getItem('subscription_expires', (err, expireDateStr) => {
+                const now = new Date().getTime();
+
+                if (!err && expireDateStr && now < Number(expireDateStr)) {
+                    // Подписка активна (срок еще не вышел)
+                    unlockAll('PREMIUM доступ активен');
                 } else {
-                    // Если не куплено, показываем кнопку покупки
+                    // Подписка истекла или её не было
                     document.getElementById('buyBtn').style.display = 'block';
                     document.getElementById('subtitle').innerHTML = 'Тренировки для трансформации тела';
                 }
@@ -194,39 +195,38 @@
                 return;
             }
 
-            // Проверяем перед оплатой через облако
-            tg.CloudStorage.getItem('isPremium', (err, value) => {
-                if (!err && value === 'true') {
-                    unlockAll();
-                    tg.showAlert('У вас уже активирован PREMIUM доступ! Приятной тренировки 💪');
-                    return;
-                }
+            // Вызов счета Telegram Stars
+            tg.openInvoice(INVOICE_LINK, (status) => {
+                if (status === 'paid') {
+                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                    
+                    // Считаем дату окончания: текущее время + 30 дней в миллисекундах
+                    const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+                    const expiresAt = new Date().getTime() + thirtyDaysMs;
 
-                // Вызов счета Telegram Stars
-                tg.openInvoice(INVOICE_LINK, (status) => {
-                    if (status === 'paid') {
-                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-                        
-                        // Сохраняем покупку НАВСЕГДА в облако Telegram аккаунта пользователя
-                        tg.CloudStorage.setItem('isPremium', 'true', (err, saved) => {
-                            if (saved) {
-                                unlockAll();
-                                tg.showAlert('🎉 Оплата прошла успешно! Подписка привязана к вашему аккаунту Telegram.');
-                            }
-                        });
-                    } else if (status === 'failed') {
-                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-                        tg.showAlert('Не удалось провести платеж. Попробуйте еще раз.');
-                    }
-                });
+                    // Сохраняем дату окончания в облако Telegram
+                    tg.CloudStorage.setItem('subscription_expires', String(expiresAt), (err, saved) => {
+                        if (saved) {
+                            unlockAll('PREMIUM доступ активирован на 30 дней');
+                            tg.showAlert('🎉 Оплата прошла успешно! Подписка оформлена на 1 месяц.');
+                        }
+                    });
+                } else if (status === 'failed') {
+                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+                    tg.showAlert('Не удалось провести платеж. Попробуйте еще раз.');
+                }
             });
         }
 
-        function unlockAll() {
+        function unlockAll(statusText) {
             document.querySelectorAll('.lock-icon').forEach(icon => icon.textContent = '▶️');
             const buyBtn = document.getElementById('buyBtn');
             if (buyBtn) buyBtn.style.display = 'none';
-            document.getElementById('subtitle').innerHTML = 'Статус: <b style="color: #32d74b;">PREMIUM доступ активирован</b>';
+            
+            const subtitle = document.getElementById('subtitle');
+            if (subtitle) {
+                subtitle.innerHTML = 'Статус: <b style="color: #32d74b;">' + statusText + '</b>';
+            }
         }
     </script>
 </body>
