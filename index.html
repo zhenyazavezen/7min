@@ -2,573 +2,232 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Seven - Тренировки</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seven — Тренировки</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --bg-color: var(--tg-theme-bg-color, #121212);
+            --text-color: var(--tg-theme-text-color, #ffffff);
+            --hint-color: var(--tg-theme-hint-color, #aaaaaa);
+            --card-bg: var(--tg-theme-secondary-bg-color, #1e1e1e);
+            --button-color: var(--tg-theme-button-color, #2ea6ff);
+            --button-text: var(--tg-theme-button-text-color, #ffffff);
         }
 
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
             padding: 16px;
-            padding-bottom: 40px;
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-icon {
-            font-size: 28px;
+            box-sizing: border-box;
+            user-select: none;
         }
 
         h1 {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
+            font-size: 22px;
+            margin-bottom: 4px;
         }
 
         .subtitle {
-            font-size: 13px;
-            color: #94a3b8;
-            margin-top: 2px;
+            font-size: 14px;
+            color: var(--hint-color);
+            margin-bottom: 16px;
         }
 
-        .dev-badge {
-            font-size: 12px;
-            color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-        .pay-btn {
-            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
-            color: white;
+        .buy-banner {
+            background-color: var(--button-color);
+            color: var(--button-text);
             border: none;
-            width: 100%;
-            padding: 14px;
             border-radius: 14px;
+            padding: 16px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: bold;
+            width: 100%;
             cursor: pointer;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(46, 166, 255, 0.3);
             transition: transform 0.1s ease;
         }
 
-        .pay-btn:active {
+        .buy-banner:active {
             transform: scale(0.98);
         }
 
         .section-title {
             font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #64748b;
-            margin-bottom: 12px;
-            font-weight: 600;
+            color: var(--hint-color);
+            margin: 20px 0 10px 0;
+            letter-spacing: 0.5px;
         }
 
-        .categories-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .category-card {
-            background: #1e293b;
+        .card {
+            background-color: var(--card-bg);
             border-radius: 14px;
             padding: 16px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            transition: background 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.1s ease;
         }
 
-        .category-card:active {
-            background: #334155;
+        .card:active {
+            transform: scale(0.98);
         }
 
-        .category-info {
+        .card-info {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
-        .category-emoji {
+        .card-icon {
             font-size: 24px;
-            background: rgba(255, 255, 255, 0.05);
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
         }
 
-        .category-name {
+        .card-title {
             font-size: 16px;
-            font-weight: 600;
-            color: #f1f5f9;
-        }
-
-        .category-status {
-            font-size: 20px;
-        }
-
-        /* Sub-items view (Workouts inside category) */
-        #workouts-view {
-            display: none;
-        }
-
-        .back-btn {
-            background: #1e293b;
-            color: #38bdf8;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .workout-card {
-            background: #1e293b;
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .workout-title {
-            font-size: 17px;
-            font-weight: 700;
-            color: #f8fafc;
-            margin-bottom: 6px;
-        }
-
-        .workout-meta {
-            font-size: 13px;
-            color: #38bdf8;
             font-weight: 500;
-            margin-bottom: 8px;
         }
 
-        .workout-desc {
-            font-size: 14px;
-            color: #94a3b8;
-            line-height: 1.4;
-            margin-bottom: 14px;
-        }
-
-        .start-workout-btn {
-            background: #0ea5e9;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            display: block;
-        }
-
-        /* Modal dialog */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 100;
-        }
-        .modal-content {
-            background: #1e293b;
-            padding: 24px;
-            border-radius: 16px;
-            text-align: center;
-            max-width: 320px;
-            width: 100%;
-            border: 1px solid rgba(255,59,48,0.2);
-        }
-        .modal-title {
+        .lock-icon {
             font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #f8fafc;
-        }
-        .modal-text {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-        .modal-close {
-            background: #334155;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
+            opacity: 0.8;
         }
     </style>
 </head>
 <body>
 
-    <div id="main-view">
-        <header>
-            <div>
-                <div class="logo-area">
-                    <span class="logo-icon">💪</span>
-                    <h1>Seven</h1>
-                </div>
-                <div class="subtitle">Тренировки для трансформации тела</div>
-            </div>
-            <div id="status-badge" class="dev-badge" style="display: none;">Разработчик</div>
-        </header>
+    <h1>💪 Seven</h1>
+    <div class="subtitle" id="subtitle">Проверка подписки...</div>
 
-        <button class="pay-btn" id="payButton" onclick="buySubscription()">Разблокировать на 1 месяц ⭐</button>
+    <button class="buy-banner" id="buyBtn" onclick="openSubscription()" style="display: none;">
+        Разблокировать на 1 месяц ⭐️
+    </button>
 
-        <div class="section-title">Категории тренировок</div>
+    <div class="section-title">Категории тренировок</div>
 
-        <div class="categories-list">
-            <div class="category-card" onclick="openCategory('beginner')">
-                <div class="category-info">
-                    <div class="category-emoji">⚡</div>
-                    <div class="category-name">1. Для начала</div>
-                </div>
-                <div class="category-status" id="icon-beginner">🔒</div>
-            </div>
-
-            <div class="category-card" onclick="openCategory('mobility')">
-                <div class="category-info">
-                    <div class="category-emoji">🧘</div>
-                    <div class="category-name">2. Подвижность</div>
-                </div>
-                <div class="category-status" id="icon-mobility">🔒</div>
-            </div>
-
-            <div class="category-card" onclick="openCategory('weightloss')">
-                <div class="category-info">
-                    <div class="category-emoji">🔥</div>
-                    <div class="category-name">3. Сброс веса</div>
-                </div>
-                <div class="category-status" id="icon-weightloss">🔒</div>
-            </div>
-
-            <div class="category-card" onclick="openCategory('special')">
-                <div class="category-info">
-                    <div class="category-emoji">🎯</div>
-                    <div class="category-name">5. Специальные</div>
-                </div>
-                <div class="category-status" id="icon-special">🔒</div>
-            </div>
-
-            <div class="category-card" onclick="openCategory('beach')">
-                <div class="category-info">
-                    <div class="category-emoji">🏖️</div>
-                    <div class="category-name">6. К пляжу готов</div>
-                </div>
-                <div class="category-status" id="icon-beach">🔒</div>
-            </div>
-
-            <div class="category-card" onclick="openCategory('challenge')">
-                <div class="category-info">
-                    <div class="category-emoji">🚀</div>
-                    <div class="category-name">7. Примите вызов</div>
-                </div>
-                <div class="category-status" id="icon-challenge">🔒</div>
-            </div>
-
-            <div class="category-card" onclick="openCategory('nutrition')">
-                <div class="category-info">
-                    <div class="category-emoji">🥗</div>
-                    <div class="category-name">8. Питание</div>
-                </div>
-                <div class="category-status" id="icon-nutrition">🔒</div>
-            </div>
-
-            <div class="category-card" onclick="openCategory('fasting')">
-                <div class="category-info">
-                    <div class="category-emoji">⏱️</div>
-                    <div class="category-name">9. Интервальное голодание</div>
-                </div>
-                <div class="category-status" id="icon-fasting">🔒</div>
-            </div>
-        </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">⚡</span><span class="card-title">1. Для начала</span></div>
+        <span class="lock-icon">🔒</span>
     </div>
-
-    <!-- Workouts View (Inside "1. Для начала") -->
-    <div id="workouts-view">
-        <button class="back-btn" onclick="goBack()">← Назад к категориям</button>
-        <div class="section-title">1. Для начала</div>
-        
-        <div id="workouts-container">
-            <!-- Dynamically populated via JS -->
-        </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">🧘</span><span class="card-title">2. Подвижность</span></div>
+        <span class="lock-icon">🔒</span>
     </div>
-
-    <!-- Modal for locked categories -->
-    <div class="modal" id="lockModal">
-        <div class="modal-content">
-            <div class="modal-title">Требуется подписка</div>
-            <div class="modal-text">Для доступа ко всем тренировкам необходимо оформить месячную подписку.</div>
-            <button class="modal-close" onclick="closeModal()">Понятно</button>
-        </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">🔥</span><span class="card-title">3. Сброс веса</span></div>
+        <span class="lock-icon">🔒</span>
+    </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">⭐️</span><span class="card-title">4. Быть в форме</span></div>
+        <span class="lock-icon">🔒</span>
+    </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">🎯</span><span class="card-title">5. Специальные</span></div>
+        <span class="lock-icon">🔒</span>
+    </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">🏖️</span><span class="card-title">6. К пляжу готов</span></div>
+        <span class="lock-icon">🔒</span>
+    </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">🚀</span><span class="card-title">7. Примите вызов</span></div>
+        <span class="lock-icon">🔒</span>
+    </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">🥗</span><span class="card-title">8. Питание</span></div>
+        <span class="lock-icon">🔒</span>
+    </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">⏱️</span><span class="card-title">9. Интервальное голодание</span></div>
+        <span class="lock-icon">🔒</span>
+    </div>
+    <div class="card" onclick="openSubscription()">
+        <div class="card-info"><span class="card-icon">🎵</span><span class="card-title">10. Музыка</span></div>
+        <span class="lock-icon">🔒</span>
     </div>
 
     <script>
-        // Data for workouts in "1. Для начала"
-        const beginnerWorkouts = [
-            {
-                title: "Все тело",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Научно доказано, что так обеспечиваются самые лучшие результаты в кратчайшие сроки. Этот классический ВИТ имеет все необходимое для достижения ваших целей.",
-                link: "https://t.me/c/2527751508/2/57"
-            },
-            {
-                title: "Верхняя часть",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Руки, плечи, грудь и верхняя часть спины всего здесь есть отличные тренировки.",
-                link: "https://t.me/c/2527751508/2/58"
-            },
-            {
-                title: "Нижняя часть",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Цель этой тренировки ягодицы и ноги с идеальным балансом силы и кардио.",
-                link: "https://t.me/c/2527751508/2/65"
-            },
-            {
-                title: "Гибкость",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Увеличьте амплитуду движений и уменьшите ограничения мышц с помощью этого упражнения на растяжение всего корпуса.",
-                link: "https://t.me/c/2527751508/2/70"
-            },
-            {
-                title: "Учебка",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Сосредоточьтесь на основных группах мышц. Попробуйте высокоинтенсивную тренировку, которая заставит вас попотеть.",
-                link: "https://t.me/c/2527751508/2/71"
-            },
-            {
-                title: "Спина и передняя часть",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Если давать каждой половине тела отдохнуть по очереди, вы сможете быстрее восстановиться между упражнениями. И выложиться ещё больше.",
-                link: "https://t.me/c/2527751508/2/72"
-            },
-            {
-                title: "Верх и низ",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Если давать каждой половине тела отдохнуть по очереди, вы сможете быстрее восстановиться между упражнениями. И выложиться ещё больше.",
-                link: "https://t.me/c/2527751508/2/73"
-            },
-            {
-                title: "Легкая форма",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Приведите себя в форму, выполняя эту простую тренировку, которая подойдет любому.",
-                link: "https://t.me/c/2527751508/2/74"
-            },
-            {
-                title: "Функциональная (новичок)",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Доведите каждую часть своего тела до предела возможностей при помощи этих разнообразных функциональных движений.",
-                link: "https://t.me/c/2527751508/2/75"
-            },
-            {
-                title: "На четвереньках",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Этот набор упражнений на полу уменьшает риск травм, а также помогает поддерживать себя в должной форме и формировать сильное тело.",
-                link: "https://t.me/c/2527751508/2/81"
-            },
-            {
-                title: "Разогрев",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Отличный способ начать день. Разогрейте мышцы и суставы для лучших результатов.",
-                link: "https://t.me/c/2527751508/2/82"
-            },
-            {
-                title: "Я здесь первый раз",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Впервые в Seven? Эти простые упражнения выработают новую привычку на всю жизнь!",
-                link: "https://t.me/c/2527751508/2/83"
-            },
-            {
-                title: "Старший",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Никогда не поздно для силовых тренировок. Эта тренировка подойдет любому новичку, а также специально разработана для тех, кому больше 65 лет.",
-                link: "https://t.me/c/2527751508/2/84"
-            },
-            {
-                title: "Работа над корпусом",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Ищете идеальное начало для своего фитнес-курса? Вы его нашли!",
-                link: "https://t.me/c/2527751508/2/85"
-            },
-            {
-                title: "Малая ударная нагрузка",
-                meta: "12 упражнений 07:50 мин.",
-                desc: "Прокачайте свою кровь и укрепите мышцы с помощью этой комфортной для суставов тренировки.",
-                link: "https://t.me/c/2527751508/2/86"
-            }
-        ];
+        let tg = window.Telegram.WebApp;
+        tg.expand();
 
-        // Telegram WebApp initialization & Subscription logic
-        const tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.expand();
-        }
+        const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
+        const DEV_USERNAME = 'zhenya_zavezen';
 
-        const DEVELOPER_USERNAME = "zhenya_zavezen";
-        const INVOICE_LINK = "https://t.me/$YOUR_INVOICE_LINK";
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = tg.initDataUnsafe?.user;
+            const currentUsername = user?.username ? user.username.toLowerCase() : '';
 
-        let isSubscriber = false;
-
-        function checkAccess() {
-            if (!tg || !tg.initDataUnsafe || !tg.initDataUnsafe.user) {
-                applyAccessState(true, "Режим тестирования");
+            // 1. Твой личный доступ разработчика
+            if (currentUsername === DEV_USERNAME.toLowerCase()) {
+                unlockAll('Режим разработчика (@zhenya_zavezen)');
                 return;
             }
 
-            const user = tg.initDataUnsafe.user;
-            const username = user.username;
+            // 2. Проверка срока подписки из облака Telegram
+            tg.CloudStorage.getItem('subscription_expires', (err, expireDateStr) => {
+                const now = new Date().getTime();
 
-            if (username === DEVELOPER_USERNAME) {
-                applyAccessState(true, "Режим разработчика (@" + username + ")");
+                if (!err && expireDateStr && now < Number(expireDateStr)) {
+                    // Подписка активна (срок еще не вышел)
+                    unlockAll('PREMIUM доступ активен');
+                } else {
+                    // Подписка истекла или её не было
+                    document.getElementById('buyBtn').style.display = 'block';
+                    document.getElementById('subtitle').innerHTML = 'Тренировки для трансформации тела';
+                }
+            });
+        });
+
+        function openSubscription() {
+            const user = tg.initDataUnsafe?.user;
+            const currentUsername = user?.username ? user.username.toLowerCase() : '';
+
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+            if (currentUsername === DEV_USERNAME.toLowerCase()) {
+                tg.showAlert('Режим разработчика активен. Доступ бесплатный!');
                 return;
             }
 
-            if (tg.CloudStorage) {
-                tg.CloudStorage.getItem("sub_expire", (err, value) => {
-                    if (!err && value) {
-                        const expireTime = parseInt(value, 10);
-                        if (Date.now() < expireTime) {
-                            applyAccessState(true, "Подписка активна");
-                            return;
+            // Вызов счета Telegram Stars
+            tg.openInvoice(INVOICE_LINK, (status) => {
+                if (status === 'paid') {
+                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                    
+                    // Считаем дату окончания: текущее время + 30 дней в миллисекундах
+                    const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+                    const expiresAt = new Date().getTime() + thirtyDaysMs;
+
+                    // Сохраняем дату окончания в облако Telegram
+                    tg.CloudStorage.setItem('subscription_expires', String(expiresAt), (err, saved) => {
+                        if (saved) {
+                            unlockAll('PREMIUM доступ активирован на 30 дней');
+                            tg.showAlert('🎉 Оплата прошла успешно! Подписка оформлена на 1 месяц.');
                         }
-                    }
-                    applyAccessState(false, "Требуется подписка");
-                });
-            } else {
-                applyAccessState(false, "Требуется подписка");
-            }
-        }
-
-        function applyAccessState(granted, statusText) {
-            isSubscriber = granted;
-            const badge = document.getElementById("status-badge");
-            const payBtn = document.getElementById("payButton");
-
-            if (granted) {
-                badge.style.display = "block";
-                badge.innerText = statusText;
-                payBtn.style.display = "none";
-
-                document.querySelectorAll(".category-status").forEach(el => {
-                    el.innerText = "▶";
-                });
-            } else {
-                payBtn.style.display = "block";
-                document.querySelectorAll(".category-status").forEach(el => {
-                    el.innerText = "🔒";
-                });
-            }
-        }
-
-        function buySubscription() {
-            if (tg && tg.openInvoice) {
-                tg.openInvoice(INVOICE_LINK, (status) => {
-                    if (status === "paid") {
-                        activateSubscriptionLocally();
-                    }
-                });
-            } else {
-                activateSubscriptionLocally();
-            }
-        }
-
-        function activateSubscriptionLocally() {
-            const expireTime = Date.now() + (30 * 24 * 60 * 60 * 1000);
-            if (tg && tg.CloudStorage) {
-                tg.CloudStorage.setItem("sub_expire", expireTime.toString(), (err, res) => {
-                    if (!err) {
-                        alert("Оплата прошла успешно! Подписка активирована на 30 дней.");
-                        applyAccessState(true, "Подписка активна");
-                    }
-                });
-            } else {
-                alert("Подписка активирована!");
-                applyAccessState(true, "Подписка активна");
-            }
-        }
-
-        function openCategory(categoryKey) {
-            if (!isSubscriber) {
-                document.getElementById("lockModal").style.display = "flex";
-                return;
-            }
-
-            if (categoryKey === 'beginner') {
-                renderBeginnerWorkouts();
-                document.getElementById("main-view").style.display = "none";
-                document.getElementById("workouts-view").style.display = "block";
-                window.scrollTo(0, 0);
-            } else {
-                alert("Этот раздел находится в разработке и скоро появится!");
-            }
-        }
-
-        function renderBeginnerWorkouts() {
-            const container = document.getElementById("workouts-container");
-            container.innerHTML = "";
-
-            beginnerWorkouts.forEach(w => {
-                const card = document.createElement("div");
-                card.className = "workout-card";
-                card.innerHTML = `
-                    <div class="workout-title">${w.title}</div>
-                    <div class="workout-meta">${w.meta}</div>
-                    <div class="workout-desc">${w.desc}</div>
-                    <a href="${w.link}" target="_blank" class="start-workout-btn">Смотреть тренировку ▶</a>
-                `;
-                container.appendChild(card);
+                    });
+                } else if (status === 'failed') {
+                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+                    tg.showAlert('Не удалось провести платеж. Попробуйте еще раз.');
+                }
             });
         }
 
-        function goBack() {
-            document.getElementById("workouts-view").style.display = "none";
-            document.getElementById("main-view").style.display = "block";
-            window.scrollTo(0, 0);
+        function unlockAll(statusText) {
+            document.querySelectorAll('.lock-icon').forEach(icon => icon.textContent = '▶️');
+            const buyBtn = document.getElementById('buyBtn');
+            if (buyBtn) buyBtn.style.display = 'none';
+            
+            const subtitle = document.getElementById('subtitle');
+            if (subtitle) {
+                subtitle.innerHTML = 'Статус: <b style="color: #32d74b;">' + statusText + '</b>';
+            }
         }
-
-        function closeModal() {
-            document.getElementById("lockModal").style.display = "none
+    </script>
+</body>
+</html>
