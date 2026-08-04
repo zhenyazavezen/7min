@@ -183,7 +183,7 @@
             <div class="card-info"><span class="card-icon">🔥</span><span class="card-title">3. Сброс веса</span></div>
             <span class="lock-icon main-lock">🔒</span>
         </div>
-        <div class="card" onclick="openSubscription()">
+        <div class="card" onclick="openCategory('stay_in_shape')">
             <div class="card-info"><span class="card-icon">⭐️</span><span class="card-title">4. Быть в форме</span></div>
             <span class="lock-icon main-lock">🔒</span>
         </div>
@@ -447,7 +447,108 @@
                 desc: "С легкостью укрепляйте свое тело и разум, чтобы увеличить общую силу.",
                 link: "https://t.me/c/2527751508/87/116"
             }
+        ];        
+
+        // Данные для раздела «Быть в форме»
+        const stayInShapeWorkouts = [
+            {
+                title: "Сердце",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Идите ва-банк и терпите до конца, чтобы укрепить и прибавить здоровья сердцу! Улучшенная выносливость гарантирована.",
+                link: "https://t.me/c/2527751508/144/376"
+            },
+            {
+                title: "Взрывные",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Тренируйтесь, как атлет! Взрывные упражнения для всего тела отлично подходят для развития практической скорости и силы. Такое подойдет для любого случая.",
+                link: "https://t.me/c/2527751508/144/377"
+            },
+            {
+                title: "Сила",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Благодаря этой тренировке для контроля веса тела вы укрепите весь свой организм. Тренировка сердца может подождать, время качаться!",
+                link: "https://t.me/c/2527751508/144/378"
+            },
+            {
+                title: "Атлетические",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Приемы из спортивных программ тренировок, которые откроют вам столь желанные грани физической подготовки.",
+                link: "https://t.me/c/2527751508/144/379"
+            },
+            {
+                title: "Резкие всплески",
+                meta: "16 упражнений • 07:50 мин.",
+                desc: "Резкие всплески идеально подойдут для сжигания жира, увеличения мышечной массы и улучшения аэробной способности.",
+                link: "https://t.me/c/2527751508/144/380"
+            },
+            {
+                title: "Лечебная физкультура",
+                meta: "16 упражнений • 07:50 мин.",
+                desc: "Поднимите уровень аэробной и анаэробной выносливости, повысив метаболизм и частоту сердечных сокращений за секунды. Наслаждайтесь жиросжигающим эффектом после упражнения.",
+                link: "https://t.me/c/2527751508/144/381"
+            },
+            {
+                title: "Сердце и пресс",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Идеальное сочетание тренировки для сердца и мышц пресса для повышения тонуса организма.<br><br>Теряйте жир и наращивайте мышцы.",
+                link: "https://t.me/c/2527751508/144/382"
+            },
+            {
+                title: "Профи для всего тела",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Тренировка для всего тела, которую мы все обожаем, теперь вышла на новый уровень благодаря свежему взгляду.",
+                link: "https://t.me/c/2527751508/144/383"
+            },
+            {
+                title: "Выбор тренера",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Разработанная нашим тренером всеобъемлющая тренировка, со всеми преимуществами тренировки для всего тела.",
+                link: "https://t.me/c/2527751508/144/384"
+            },
+            {
+                title: "Пластика",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Основа упражнений для контроля веса тела.<br><br>Развивайте силу, физическую форму и гибкость, баланс, подвижность и координацию движений.",
+                link: "https://t.me/c/2527751508/144/385"
+            },
+            {
+                title: "Силовая тренировка сердца",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Включает элемент движений на основе навыков. Результаты становятся лучше, а веселье больше.",
+                link: "https://t.me/c/2527751508/144/386"
+            },
+            {
+                title: "Динамическая",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Многомерная тренировка, предназначенная для улучшения различных аспектов ваших способностей.",
+                link: "https://t.me/c/2527751508/144/387"
+            },
+            {
+                title: "Форсаж",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Больше силы и улучшенная подвижность благодаря этой функциональной и динамичной тренировке.",
+                link: "https://t.me/c/2527751508/144/388"
+            },
+            {
+                title: "ИТВИ и отдых",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Быстрый и эффективный результат от сочетания упражнений ИТВИ и упражнений на подвижность решение 50/50.",
+                link: "https://t.me/c/2527751508/144/389"
+            },
+            {
+                title: "Вместе сильнее",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Эта силовая и кардио-тренировка на основе ВИТ отлично подходит для выполнения в одиночку или с надежным партнером. Виртуальные «дай пять» во всех отношениях.",
+                link: "https://t.me/c/2527751508/144/390"
+            },
+            {
+                title: "Активное восстановление",
+                meta: "6 упражнений • 06:50 мин.",
+                desc: "Легкая тренировка для успокоения воспаленных мышц и восстановления после тяжелых тренировок.",
+                link: "https://t.me/c/2527751508/144/391"
+            }
         ];
+        
 
         document.addEventListener("DOMContentLoaded", () => {
             const user = tg.initDataUnsafe?.user;
@@ -477,14 +578,18 @@
             const container = document.getElementById('workouts-list');
             container.innerHTML = '';
 
-            let targetList = [];
-            if (currentCategoryKey === 'start') {
-                targetList = startWorkouts;
-            } else if (currentCategoryKey === 'mobility') {
-                targetList = mobilityWorkouts;
-            } else if (currentCategoryKey === 'weight_loss') {
-                targetList = weightLossWorkouts;
-            }
+                let targetList = [];
+    if (currentCategoryKey === 'start') {
+        targetList = startWorkouts;
+    } else if (currentCategoryKey === 'mobility') {
+        targetList = mobilityWorkouts;
+    } else if (currentCategoryKey === 'weight_loss') {
+        targetList = weightLossWorkouts;
+    } else if (currentCategoryKey === 'stay_in_shape') {
+        targetList = stayInShapeWorkouts;
+    }
+
+        
 
             targetList.forEach(item => {
                 const card = document.createElement('div');
@@ -505,28 +610,34 @@
 
         // Переключение экранов
         function openCategory(categoryName) {
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-            currentCategoryKey = categoryName;
+    if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+    currentCategoryKey = categoryName;
 
-            const titleEl = document.getElementById('sub-title');
-            const subtitleEl = document.getElementById('sub-subtitle');
+    const titleEl = document.getElementById('sub-title');
+    const subtitleEl = document.getElementById('sub-subtitle');
 
-            if (categoryName === 'start') {
-                titleEl.innerHTML = '⚡ Для начала';
-                subtitleEl.innerHTML = 'Выберите тренировку для старта';
-            } else if (categoryName === 'mobility') {
-                titleEl.innerHTML = '🧘 Подвижность';
-                subtitleEl.innerHTML = 'Динамические упражнения для растяжки';
-            } else if (categoryName === 'weight_loss') {
-                titleEl.innerHTML = '🔥 Сброс веса';
-                subtitleEl.innerHTML = 'Эффективные тренировки для сжигания калорий';
-            }
+    if (categoryName === 'start') {
+        titleEl.innerHTML = '⚡ Для начала';
+        subtitleEl.innerHTML = 'Выберите тренировку для старта';
+    } else if (categoryName === 'mobility') {
+        titleEl.innerHTML = '🧘 Подвижность';
+        subtitleEl.innerHTML = 'Динамические упражнения для растяжки';
+    } else if (categoryName === 'weight_loss') {
+        titleEl.innerHTML = '🔥 Сброс веса';
+        subtitleEl.innerHTML = 'Эффективные тренировки для сжигания калорий';
+    } else if (categoryName === 'stay_in_shape') {
+        titleEl.innerHTML = '⭐️ Быть в форме';
+        subtitleEl.innerHTML = 'Комплексы упражнений для поддержания формы';
+    }
 
-            renderWorkoutsList();
+    renderWorkoutsList();
 
-            document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('sub-screen').classList.remove('hidden');
+    document.getElementById('main-screen').classList.add('hidden');
+    document.getElementById('sub-screen').classList.remove('hidden');
         }
+        
+                
+            
 
         function goBackToMain() {
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
