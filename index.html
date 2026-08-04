@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7Min — Тренировки</title>
+    <title>Seven — Тренировки</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -102,7 +102,7 @@
 </head>
 <body>
 
-    <h1>💪 7Min</h1>
+    <h1>💪 Seven</h1>
     <div class="subtitle" id="subtitle">Тренировки для трансформации тела</div>
 
     <!-- Кнопка вызова оплаты -->
@@ -226,7 +226,7 @@
                     }
                     localStorage.setItem('isPremium', 'true');
                     unlockAll();
-                    tg.showAlert('🎉 Оплата прошла успешно! Полный доступ в 7Min разблокирован.');
+                    tg.showAlert('🎉 Оплата прошла успешно! Полный доступ в Seven разблокирован.');
                 } else if (status === 'failed') {
                     if (tg.HapticFeedback) {
                         tg.HapticFeedback.notificationOccurred('error');
