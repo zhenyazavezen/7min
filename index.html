@@ -99,14 +99,12 @@
             opacity: 0.8;
         }
 
-        /* Плашка для входа разработчика */
         .dev-footer {
             text-align: center;
             padding: 20px 0;
             font-size: 12px;
             color: var(--hint-color);
             opacity: 0.5;
-            cursor: pointer;
         }
     </style>
 </head>
@@ -202,8 +200,7 @@
         <span class="lock-icon">🔒</span>
     </div>
 
-    <!-- СЕКРЕТНАЯ ПЛАШКА В САМОМ НИЗУ -->
-    <div class="dev-footer" onclick="devSecretClick()">
+    <div class="dev-footer">
         Seven App v1.0
     </div>
 
@@ -211,52 +208,40 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Ссылка на счет за товар (100 Stars)
         const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
+        
+        // Твой ник разработчика (без @)
+        const DEV_USERNAME = 'zhenya_zavezen'; 
 
-        // Переменные для кликов разработчика
-        let devClicks = 0;
-        let devTimer = null;
-
-        // Проверяем статус доступа при загрузке
+        // Проверяем доступ при загрузке
         document.addEventListener("DOMContentLoaded", () => {
-            if (localStorage.getItem('isPremium') === 'true') {
+            // Получаем ник текущего пользователя из Telegram
+            const userUsername = tg.initDataUnsafe?.user?.username;
+
+            // Если зашёл разработчик ИЛИ у обычного юзера есть оплата в localStorage
+            if (userUsername === DEV_USERNAME || localStorage.getItem('isPremium') === 'true') {
                 unlockAll();
+
+                // Показываем подпись, если это именно ты
+                if (userUsername === DEV_USERNAME) {
+                    const subtitle = document.getElementById('subtitle');
+                    if (subtitle) {
+                        subtitle.innerHTML = 'Статус: <b style="color: #2ea6ff;">Режим разработчика (@zhenya_zavezen)</b>';
+                    }
+                }
             }
         });
 
-        // Функция секретного клика по нижней плашке
-        function devSecretClick() {
-            devClicks++;
-
-            // Сброс, если пауза между кликами больше 3 секунд
-            clearTimeout(devTimer);
-            devTimer = setTimeout(() => {
-                devClicks = 0;
-            }, 3000);
-
-            // Если кликнули 7 раз
-            if (devClicks === 7) {
-                devClicks = 0;
-                localStorage.setItem('isPremium', 'true');
-
-                if (tg.HapticFeedback) {
-                    tg.HapticFeedback.notificationOccurred('success');
-                }
-
-                unlockAll();
-                tg.showAlert('🔓 Режим разработчика активирован! Доступ открыт.');
-            }
-        }
-
         // Функция покупки
         function openSubscription() {
+            const userUsername = tg.initDataUnsafe?.user?.username;
+
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
 
-            // Если уже куплено — не вызываем счет
-            if (localStorage.getItem('isPremium') === 'true') {
+            // Если ты разработчик или пользователь оплатил — не вызываем счет
+            if (userUsername === DEV_USERNAME || localStorage.getItem('isPremium') === 'true') {
                 tg.showAlert('Раздел открыт! Приятной тренировки 💪');
                 return;
             }
