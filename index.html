@@ -98,14 +98,6 @@
             font-size: 18px;
             opacity: 0.8;
         }
-
-        .dev-footer {
-            text-align: center;
-            padding: 20px 0;
-            font-size: 12px;
-            color: var(--hint-color);
-            opacity: 0.5;
-        }
     </style>
 </head>
 <body>
@@ -200,39 +192,15 @@
         <span class="lock-icon">🔒</span>
     </div>
 
-    <div class="dev-footer">
-        Seven App v1.0
-    </div>
-
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
+        // Ссылка на счет за товар (100 Stars)
         const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
-        const DEV_USERNAME = 'zhenya_zavezen';
 
-        // Проверяем доступ при загрузке
+        // Проверяем статус доступа при загрузке
         document.addEventListener("DOMContentLoaded", () => {
-            const currentUsername = tg.initDataUnsafe?.user?.username;
-
-            // 1. ПРОВЕРКА: Если зашел именно РАЗРАБОТЧИК
-            if (currentUsername === DEV_USERNAME) {
-                unlockAll();
-                const subtitle = document.getElementById('subtitle');
-                if (subtitle) {
-                    subtitle.innerHTML = 'Статус: <b style="color: #2ea6ff;">Режим разработчика (@zhenya_zavezen)</b>';
-                }
-                return;
-            }
-
-            // 2. ПРОВЕРКА: Если это ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ, но раньше осталась старая тестовая метка в памяти — стираем её!
-            // (Это уберет замок для второго аккаунта)
-            if (currentUsername !== DEV_USERNAME && localStorage.getItem('isDevMode') === 'true') {
-                localStorage.removeItem('isDevMode');
-                localStorage.removeItem('isPremium');
-            }
-
-            // 3. ПРОВЕРКА: Настоящая покупка пользователем
             if (localStorage.getItem('isPremium') === 'true') {
                 unlockAll();
             }
@@ -240,19 +208,11 @@
 
         // Функция покупки
         function openSubscription() {
-            const currentUsername = tg.initDataUnsafe?.user?.username;
-
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
 
-            // Разработчик
-            if (currentUsername === DEV_USERNAME) {
-                tg.showAlert('Режим разработчика активен. Приятного тестирования! 💪');
-                return;
-            }
-
-            // Уже оплатил
+            // Если уже куплено — не вызываем счет
             if (localStorage.getItem('isPremium') === 'true') {
                 tg.showAlert('Раздел открыт! Приятной тренировки 💪');
                 return;
