@@ -170,7 +170,6 @@
 
         <div class="section-title">Категории тренировок</div>
 
-        <!-- Клик по первому разделу открывает подразделы -->
         <div class="card" onclick="openCategory('start')">
             <div class="card-info"><span class="card-icon">⚡</span><span class="card-title">1. Для начала</span></div>
             <span class="lock-icon main-lock">🔒</span>
@@ -183,7 +182,7 @@
             <div class="card-info"><span class="card-icon">🔥</span><span class="card-title">3. Сброс веса</span></div>
             <span class="lock-icon main-lock">🔒</span>
         </div>
-        <div class="card" onclick="openSubscription()">
+        <div class="card" onclick="openCategory('get_fit')">
             <div class="card-info"><span class="card-icon">⭐️</span><span class="card-title">4. Быть в форме</span></div>
             <span class="lock-icon main-lock">🔒</span>
         </div>
@@ -449,148 +448,33 @@
             }
         ];
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const user = tg.initDataUnsafe?.user;
-            const currentUsername = user?.username ? user.username.toLowerCase() : '';
-
-            // Проверка на разработчика
-            if (currentUsername === DEV_USERNAME.toLowerCase()) {
-                unlockAll('Режим разработчика (@zhenya_zavezen)');
-                return;
-            }
-
-            // Проверка обычной подписки через CloudStorage
-            tg.CloudStorage.getItem('subscription_expires', (err, expireDateStr) => {
-                const now = new Date().getTime();
-
-                if (!err && expireDateStr && now < Number(expireDateStr)) {
-                    unlockAll('PREMIUM доступ активен');
-                } else {
-                    document.getElementById('buyBtn').style.display = 'block';
-                    document.getElementById('subtitle').innerHTML = 'Тренировки для трансформации тела';
-                }
-            });
-        });
-
-        // Отрисовка списка тренировок в подразделе
-        function renderWorkoutsList() {
-            const container = document.getElementById('workouts-list');
-            container.innerHTML = '';
-
-            let targetList = [];
-            if (currentCategoryKey === 'start') {
-                targetList = startWorkouts;
-            } else if (currentCategoryKey === 'mobility') {
-                targetList = mobilityWorkouts;
-            } else if (currentCategoryKey === 'weight_loss') {
-                targetList = weightLossWorkouts;
-            }
-
-            targetList.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'workout-card';
-                card.onclick = () => handleWorkoutClick(item.link);
-
-                card.innerHTML = `
-                    <div class="workout-header">
-                        <span class="workout-name">${item.title}</span>
-                        <span class="lock-icon">${isSubscribed ? '▶️' : '🔒'}</span>
-                    </div>
-                    <div class="workout-meta">${item.meta}</div>
-                    <div class="workout-desc">${item.desc}</div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Переключение экранов
-        function openCategory(categoryName) {
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-            currentCategoryKey = categoryName;
-
-            const titleEl = document.getElementById('sub-title');
-            const subtitleEl = document.getElementById('sub-subtitle');
-
-            if (categoryName === 'start') {
-                titleEl.innerHTML = '⚡ Для начала';
-                subtitleEl.innerHTML = 'Выберите тренировку для старта';
-            } else if (categoryName === 'mobility') {
-                titleEl.innerHTML = '🧘 Подвижность';
-                subtitleEl.innerHTML = 'Динамические упражнения для растяжки';
-            } else if (categoryName === 'weight_loss') {
-                titleEl.innerHTML = '🔥 Сброс веса';
-                subtitleEl.innerHTML = 'Эффективные тренировки для сжигания калорий';
-            }
-
-            renderWorkoutsList();
-
-            document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('sub-screen').classList.remove('hidden');
-        }
-
-        function goBackToMain() {
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-            document.getElementById('sub-screen').classList.add('hidden');
-            document.getElementById('main-screen').classList.remove('hidden');
-        }
-
-        // Клик по конкретной тренировке
-        function handleWorkoutClick(url) {
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-            if (isSubscribed) {
-                tg.openTelegramLink(url);
-            } else {
-                openSubscription();
-            }
-        }
-
-        function openSubscription() {
-            const user = tg.initDataUnsafe?.user;
-            const currentUsername = user?.username ? user.username.toLowerCase() : '';
-
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-            if (currentUsername === DEV_USERNAME.toLowerCase()) {
-                tg.showAlert('Режим разработчика активен. Доступ бесплатный!');
-                return;
-            }
-
-            tg.openInvoice(INVOICE_LINK, (status) => {
-                if (status === 'paid') {
-                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-                    
-                    const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
-                    const expiresAt = new Date().getTime() + thirtyDaysMs;
-
-                    tg.CloudStorage.setItem('subscription_expires', String(expiresAt), (err, saved) => {
-                        if (saved) {
-                            unlockAll('PREMIUM доступ активирован на 30 дней');
-                            tg.showAlert('🎉 Оплата прошла успешно! Подписка оформлена на 1 месяц.');
-                        }
-                    });
-                } else if (status === 'failed') {
-                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-                    tg.showAlert('Не удалось провести платеж. Попробуйте еще раз.');
-                }
-            });
-        }
-
-        function unlockAll(statusText) {
-            isSubscribed = true;
-            document.querySelectorAll('.main-lock').forEach(icon => icon.textContent = '▶️');
-            
-            const buyBtn = document.getElementById('buyBtn');
-            if (buyBtn) buyBtn.style.display = 'none';
-            
-            const subtitle = document.getElementById('subtitle');
-            if (subtitle) {
-                subtitle.innerHTML = 'Статус: <b style="color: #32d74b;">' + statusText + '</b>';
-            }
-            if (currentCategoryKey) {
-                renderWorkoutsList();
-            }
-        }
-    </script>
-</body>
-</html>
+        // Данные для раздела «Быть в форме»
+        const getFitWorkouts = [
+            {
+                title: "Сердце",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Идите ва-банк и терпите до конца, чтобы укрепить и прибавить здоровья сердцу! Улучшенная выносливость гарантирована.",
+                link: "https://t.me/c/2527751508/144/376"
+            },
+            {
+                title: "Взрывные",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Тренируйтесь, как атлет! Взрывные упражнения для всего тела отлично подходят для развития практической скорости и силы. Такое подойдет для любого случая.",
+                link: "https://t.me/c/2527751508/144/377"
+            },
+            {
+                title: "Сила",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Благодаря этой тренировке для контроля веса тела вы укрепите весь свой организм. Тренировка сердца может подождать, время качаться!",
+                link: "https://t.me/c/2527751508/144/378"
+            },
+            {
+                title: "Атлетические",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Приемы из спортивных программ тренировок, которые откроют вам столь желанные грани физической подготовки.",
+                link: "https://t.me/c/2527751508/144/379"
+            },
+            {
+                title: "Резкие всплески",
+                meta: "16 упражнений • 07:50 мин.",
+                desc: "Резкие всплески
