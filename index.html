@@ -208,17 +208,14 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Ссылка на счет за товар (100 Stars)
         const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
-
-        // Имя пользователя разработчика
         const DEV_USERNAME = 'zhenya_zavezen';
 
-        // Проверяем статус доступа при загрузке
+        // Проверяем доступ при загрузке
         document.addEventListener("DOMContentLoaded", () => {
             const currentUsername = tg.initDataUnsafe?.user?.username;
 
-            // Если зашел разработчик
+            // 1. ПРОВЕРКА: Если зашел именно РАЗРАБОТЧИК
             if (currentUsername === DEV_USERNAME) {
                 unlockAll();
                 const subtitle = document.getElementById('subtitle');
@@ -228,13 +225,20 @@
                 return;
             }
 
-            // Проверка оплаты для обычных пользователей
+            // 2. ПРОВЕРКА: Если это ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ, но раньше осталась старая тестовая метка в памяти — стираем её!
+            // (Это уберет замок для второго аккаунта)
+            if (currentUsername !== DEV_USERNAME && localStorage.getItem('isDevMode') === 'true') {
+                localStorage.removeItem('isDevMode');
+                localStorage.removeItem('isPremium');
+            }
+
+            // 3. ПРОВЕРКА: Настоящая покупка пользователем
             if (localStorage.getItem('isPremium') === 'true') {
                 unlockAll();
             }
         });
 
-        // Функция покупки / открытий
+        // Функция покупки
         function openSubscription() {
             const currentUsername = tg.initDataUnsafe?.user?.username;
 
@@ -242,8 +246,14 @@
                 tg.HapticFeedback.impactOccurred('medium');
             }
 
-            // Если ты разработчик или у юзера куплен премиум
-            if (currentUsername === DEV_USERNAME || localStorage.getItem('isPremium') === 'true') {
+            // Разработчик
+            if (currentUsername === DEV_USERNAME) {
+                tg.showAlert('Режим разработчика активен. Приятного тестирования! 💪');
+                return;
+            }
+
+            // Уже оплатил
+            if (localStorage.getItem('isPremium') === 'true') {
                 tg.showAlert('Раздел открыт! Приятной тренировки 💪');
                 return;
             }
