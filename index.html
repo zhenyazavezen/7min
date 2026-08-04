@@ -98,6 +98,16 @@
             font-size: 18px;
             opacity: 0.8;
         }
+
+        /* Плашка для входа разработчика */
+        .dev-footer {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 12px;
+            color: var(--hint-color);
+            opacity: 0.5;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -184,13 +194,17 @@
         <span class="lock-icon">🔒</span>
     </div>
 
-    <!-- Карточка "Музыка" с ID для отслеживания кликов разработчика -->
-    <div class="card" id="musicCard" onclick="handleCategoryClick(event)">
+    <div class="card" onclick="openSubscription()">
         <div class="card-info">
             <span class="card-icon">🎵</span>
             <span class="card-title">10. Музыка</span>
         </div>
         <span class="lock-icon">🔒</span>
+    </div>
+
+    <!-- СЕКРЕТНАЯ ПЛАШКА В САМОМ НИЗУ -->
+    <div class="dev-footer" onclick="devSecretClick()">
+        Seven App v1.0
     </div>
 
     <script>
@@ -200,9 +214,9 @@
         // Ссылка на счет за товар (100 Stars)
         const INVOICE_LINK = 'https://t.me/$eM-_apukiUtDGgAAjhEa2eMnaYQ';
 
-        // Переменные для секретного режима разработчика (7 кликов)
-        let musicClickCount = 0;
-        let musicClickTimer = null;
+        // Переменные для кликов разработчика
+        let devClicks = 0;
+        let devTimer = null;
 
         // Проверяем статус доступа при загрузке
         document.addEventListener("DOMContentLoaded", () => {
@@ -211,35 +225,28 @@
             }
         });
 
-        // Функция обработки клика по категории "Музыка"
-        function handleCategoryClick(event) {
-            // Если премиум еще не включен, считаем секретные клики
-            if (localStorage.getItem('isPremium') !== 'true') {
-                musicClickCount++;
+        // Функция секретного клика по нижней плашке
+        function devSecretClick() {
+            devClicks++;
 
-                // Сбрасываем счетчик, если между кликами прошло более 3 секунд
-                clearTimeout(musicClickTimer);
-                musicClickTimer = setTimeout(() => {
-                    musicClickCount = 0;
-                }, 3000);
+            // Сброс, если пауза между кликами больше 3 секунд
+            clearTimeout(devTimer);
+            devTimer = setTimeout(() => {
+                devClicks = 0;
+            }, 3000);
 
-                // Если нажали 7 раз
-                if (musicClickCount === 7) {
-                    musicClickCount = 0;
-                    localStorage.setItem('isPremium', 'true');
-                    
-                    if (tg.HapticFeedback) {
-                        tg.HapticFeedback.notificationOccurred('success');
-                    }
-                    
-                    unlockAll();
-                    tg.showAlert('🔓 Режим разработчика активирован! Все разделы разблокированы.');
-                    return;
+            // Если кликнули 7 раз
+            if (devClicks === 7) {
+                devClicks = 0;
+                localStorage.setItem('isPremium', 'true');
+
+                if (tg.HapticFeedback) {
+                    tg.HapticFeedback.notificationOccurred('success');
                 }
-            }
 
-            // Обычное поведение — вызов подписки
-            openSubscription();
+                unlockAll();
+                tg.showAlert('🔓 Режим разработчика активирован! Доступ открыт.');
+            }
         }
 
         // Функция покупки
