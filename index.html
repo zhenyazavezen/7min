@@ -187,7 +187,7 @@
             <div class="card-info"><span class="card-icon">⭐️</span><span class="card-title">4. Быть в форме</span></div>
             <span class="lock-icon main-lock">🔒</span>
         </div>
-        <div class="card" onclick="openSubscription()">
+        <div class="card" onclick="openCategory('special') ">
             <div class="card-info"><span class="card-icon">🎯</span><span class="card-title">5. Специальные</span></div>
             <span class="lock-icon main-lock">🔒</span>
         </div>
@@ -548,6 +548,33 @@
                 link: "https://t.me/c/2527751508/144/391"
             }
         ];
+                const specialWorkouts = [
+            {
+                title: "Офисное кресло",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Вы и так уже в кресле, так используйте его для этой тренировки!",
+                link: "https://t.me/c/2527751508/160/393"
+            },
+            {
+                title: "Утреннее пробуждение",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Эта тренировка пробуждает тело ото сна, и вы будете готовы бросить вызов всему миру.",
+                link: "https://t.me/c/2527751508/160/394"
+            },
+            {
+                title: "Офис",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Сделайте перерыв и очистите сознание. Эта тренировка стимулирует кровообращение и может выполняться в офисе.",
+                link: "https://t.me/c/2527751508/160/395"
+            },
+            {
+                title: "После бега",
+                meta: "12 упражнений • 07:50 мин.",
+                desc: "Дополните бег каким-либо силовым упражнением с растягиванием во второй половине.",
+                link: "https://t.me/c/2527751508/160/396"
+            }
+        ];
+        
         
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -587,7 +614,10 @@
         targetList = weightLossWorkouts;
     } else if (currentCategoryKey === 'stay_in_shape') {
         targetList = stayInShapeWorkouts;
+    }        else if (currentCategoryKey === 'special') {
+            targetList = specialWorkouts;
     }
+            
 
         
 
