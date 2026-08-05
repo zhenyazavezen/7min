@@ -738,7 +738,14 @@ if (currentCategoryKey === 'start') {
     } else if (categoryName === 'stay_in_shape') {
         titleEl.innerHTML = '⭐️ Быть в форме';
         subtitleEl.innerHTML = 'Комплексы упражнений для поддержания формы';
-    }
+    
+                } else if (categoryName === 'special') {
+        titleEl.innerHTML = '🎯 Специальные';
+        subtitleEl.innerHTML = 'Упражнения для особых случаев';
+    } else if (categoryName === 'beach_ready') {
+        titleEl.innerHTML = '🏖️ К пляжу готов';
+        subtitleEl.innerHTML = 'Комплексы для рельефа и пляжной формы';
+            
 
     renderWorkoutsList();
 
