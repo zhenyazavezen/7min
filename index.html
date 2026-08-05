@@ -658,7 +658,7 @@
             const currentUsername = user?.username ? user.username.toLowerCase() : '';
 
             // Проверка на разработчика
-            if (currentUsername === DEV_USERNAME.toLowerCase()) {
+          if (currentUsername === DEV_USERNAME.toLowerCase()) {
                 unlockAll('Режим разработчика (@zhenya_zavezen)');
                 return;
             }
@@ -682,21 +682,22 @@
             container.innerHTML = '';
 
                 let targetList = [];
-    if (currentCategoryKey === 'start') {
-        targetList = startWorkouts;
-    } else if (currentCategoryKey === 'mobility') {
-        targetList = mobilityWorkouts;
-    } else if (currentCategoryKey === 'weight_loss') {
-        targetList = weightLossWorkouts;
-    } else if (currentCategoryKey === 'stay_in_shape') {
-        targetList = stayInShapeWorkouts;
-    }        else if (currentCategoryKey === 'special') {
-            targetList = specialWorkouts;
-    }
-
-    } else if (currentCategoryKey === 'beach_ready') {
-           targetList = beachWorkouts;
-  ​ ​}        
+if (currentCategoryKey === 'start') {
+    targetList = startWorkouts;
+} else if (currentCategoryKey === 'mobility') {
+    targetList = mobilityWorkouts;
+} else if (currentCategoryKey === 'weight_loss') {
+    targetList = weightLossWorkouts;
+} else if (currentCategoryKey === 'stay_in_shape') {
+    targetList = stayInShapeWorkouts;
+} else if (currentCategoryKey === 'special') {
+    targetList = specialWorkouts;
+} else if (currentCategoryKey === 'beach_ready') {
+    targetList = beachWorkouts;
+}
+            
+        
+  ​ ​        
 
         
 
