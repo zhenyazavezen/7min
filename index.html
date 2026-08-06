@@ -195,7 +195,8 @@
             <div class="card-info"><span class="card-icon">🏖️</span><span class="card-title">6. К пляжу готов</span></div>
             <span class="lock-icon main-lock">🔒</span>
         </div>
-        <div class="card" onclick="openSubscription()">
+        <div class="card" onclick="openCategory('challenge')">
+            
             <div class="card-info"><span class="card-icon">🚀</span><span class="card-title">7. Примите вызов</span></div>
             <span class="lock-icon main-lock">🔒</span>
         </div>
@@ -649,6 +650,17 @@
                 link: "https://t.me/c/2527751508/113/212"
             }
         ];
+                                const challengeWorkouts = [
+            {
+                title: "Режим ракеты",
+                meta: "6 упражнений • 07:40 мин.",
+              desc: `Хотите проверить свои силы? Повторите как можно больше упражнений за одну минуту.Готовы? Поехали!`,
+
+                link: "https://t.me/c/2527751508/142/398"
+            }
+        ];
+
+        
         
         
         
@@ -695,7 +707,10 @@
     
     } else if (currentCategoryKey === 'beach') {
             targetList = beachWorkouts;
-    }   
+        } else if (currentCategoryKey === 'challenge') {
+            targetList = challengeWorkouts;
+    }
+            
 
         
 
@@ -739,10 +754,15 @@
     } else if (categoryName === 'special') {
     titleEl.innerHTML = '🎯 Специальные';
     subtitleEl.innerHTML = 'Специальные комплексы упражнений';
-        } else if (categoryName === 'beach') {
+    } else if (categoryName === 'beach') {
         titleEl.innerHTML = '🏖️ К пляжу готов';
         subtitleEl.innerHTML = 'Серия тренировок для рельефа и пляжной формы';
-    }
+    
+    } else if (categoryName === 'challenge') {
+        titleEl.innerHTML = '🚀 Примите вызов';
+        subtitleEl.innerHTML = 'Испытания для проверки вашей силы и выносливости';
+        
+    }       
             
 
     renderWorkoutsList();
